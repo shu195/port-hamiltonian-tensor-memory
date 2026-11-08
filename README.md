@@ -6,8 +6,8 @@
 
 Continuous-depth Port-Hamiltonian State-Space Model (**PH-SSM**) engineered to preserve inter-layer tensor memory across deep neural network representations without suffering from:
 1. **Exponential memory amnesia** (static dissipative models where $e^{-2\alpha t} \to 0$),
-2. **Brownian noise & distractor entrapment** (pure unitary / skew-symmetric models where $\operatorname{Re}(\lambda) \equiv 0$), or
-3. **Dimensional rank collapse** ($\operatorname{erank}(Z) \to 1$).
+2. **Brownian noise & distractor entrapment** (pure unitary / skew-symmetric models where $\mathrm{Re}(\lambda) = 0$), or
+3. **Dimensional rank collapse** ($\mathrm{erank}(Z) \to 1$).
 
 ---
 
@@ -36,10 +36,10 @@ dz/dt = (J - R_radial(z)) ∇H + B(z) u
 ```
 
 ### 1. Stage 1: The Failure of Pure Symplectic Conservation
-In an unconstrained skew-symmetric system $\dot{z} = J \nabla H$, all eigenvalues reside purely on the imaginary axis ($\operatorname{Re}(\lambda) \equiv 0$). While this guarantees non-vanishing gradients across arbitrary horizons, it lacks any mechanism to shed high-frequency noise. Under non-stationary distractor bursts ($T=1000$ steps), noise accumulates without bound, causing trajectory energy to explode past $>224.0$ and mean squared error to spike to $1321.6$.
+In an unconstrained skew-symmetric system $\dot{z} = J \nabla H$, all eigenvalues reside purely on the imaginary axis ($\mathrm{Re}(\lambda) = 0$). While this guarantees non-vanishing gradients across arbitrary horizons, it lacks any mechanism to shed high-frequency noise. Under non-stationary distractor bursts ($T=1000$ steps), noise accumulates without bound, causing trajectory energy to explode past $>224.0$ and mean squared error to spike to $1321.6$.
 
 ### 2. Stage 2: The Pathology of Isotropic Dissipation
-Adding standard isotropic damping ($A = -\alpha I + J$) bounds energy, but contracts all singular values uniformly ($e^{-2\alpha t}$). This leads to catastrophic representation amnesia (SNR dropping to $-5.40\text{ dB}$) and collapses the Roy-Vetterli effective rank down to degenerate 1D/2D manifolds ($\operatorname{erank}(Z) \ll D$), rendering deep representations incapable of multiplexed feature retention.
+Adding standard isotropic damping ($A = -\alpha I + J$) bounds energy, but contracts all singular values uniformly ($e^{-2\alpha t}$). This leads to catastrophic representation amnesia (SNR dropping to -5.40 dB) and collapses the Roy-Vetterli effective rank down to degenerate 1D/2D manifolds ($\mathrm{erank}(Z) \ll D$), rendering deep representations incapable of multiplexed feature retention.
 
 ### 3. Stage 3: The Port-Hamiltonian Synthesis with Radial Damping
 The system resolves both failure modes by restricting Rayleigh dissipation strictly to the **radial projection**:
