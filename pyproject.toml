@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "port-hamiltonian-tensor-memory"
+version = "0.1.0"
+description = "Port-Hamiltonian State-Space Models (PH-SSM) for Inter-Layer Tensor Memory in Deep Neural Networks"
+readme = "README.md"
+authors = [
+    { name = "Shubham Barmase", email = "barmase32@gmail.com" }
+]
+license = { text = "MIT" }
+requires-python = ">=3.9"
+dependencies = [
+    "torch>=2.0.0",
+    "numpy>=1.20.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/shu195/port-hamiltonian-tensor-memory"
+Repository = "https://github.com/shu195/port-hamiltonian-tensor-memory"
