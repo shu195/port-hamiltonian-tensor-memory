@@ -9,6 +9,10 @@ Continuous-depth Port-Hamiltonian State-Space Model (**PH-SSM**) engineered to p
 2. **Brownian noise & distractor entrapment** (pure unitary / skew-symmetric models where $\mathrm{Re}(\lambda) = 0$), or
 3. **Dimensional rank collapse** ($\mathrm{erank}(Z) \to 1$).
 
+<p align="center">
+  <img src="assets/energy_trajectory_comparison.png" alt="Energy Trajectory Comparison" width="850"/>
+</p>
+
 ---
 
 ## Dialectical Derivation & Theoretical Development
@@ -16,19 +20,19 @@ Continuous-depth Port-Hamiltonian State-Space Model (**PH-SSM**) engineered to p
 The architecture resolves a fundamental dilemma in sequence and deep layerwise representation dynamics through a multi-stage dialectical derivation:
 
 ```
-[Thesis: Exact Symplectic Flow]
+[Stage 1: Exact Symplectic Flow]
 dz/dt = J ∇H
 - Conserves symplectic 2-form & energy (det(A_J) = 1)
-- Defect: Traps non-stationary noise bursts forever (MSE explodes)
+- Defect: Traps non-stationary noise bursts forever (MSE explodes to 1321.6)
                │
                ▼  (Counter-evidence & Falsification)
-[Anti-Thesis: Adaptive Dissipation]
+[Stage 2: Adaptive Dissipation]
 dz/dt = -R(x) z + B(x) u
 - Damps noise bursts and bounds energy
 - Defect: Isotropic damping contracts eigenspectrum, causing rank collapse (erank -> 1)
                │
                ▼  (Physical & Spectral Unification)
-[Synthesis: Strang-Split Port-Hamiltonian State-Space Model]
+[Stage 3: Strang-Split Port-Hamiltonian State-Space Model]
 dz/dt = (J - R_radial(z)) ∇H + B(z) u
 - Skew-symmetric Poisson flow preserves memory channels losslessly
 - Radial Rayleigh damping dumps excess energy without touching the (D-1) orthogonal subspace
@@ -46,8 +50,12 @@ The system resolves both failure modes by restricting Rayleigh dissipation stric
 
 $$R(z) = r(z) \cdot \frac{z z^T}{\|z\|^2}, \quad r(z) = \gamma_0 \cdot \sigma\left(\frac{H(z) - H_0}{\tau}\right)$$
 
-- **Along the radial direction $\|z\|$**: Acts as a nonlinear shock absorber, dissipating noise bursts and strictly bounding trajectory energy.
+- **Along the radial direction $\|z\|$**: Acts as a nonlinear shock absorber, dissipating noise bursts and strictly bounding trajectory energy ($H(z) \le 24.6$).
 - **Along the orthogonal $(D-1)$ subspace**: Dissipation is identically zero. The skew-symmetric Cayley operator rotates representations isometrically, preserving full rank and linear decodability.
+
+<p align="center">
+  <img src="assets/effective_rank_spectrum.png" alt="Effective Rank & Singular Value Spectrum" width="900"/>
+</p>
 
 ---
 
@@ -72,6 +80,24 @@ To eliminate online matrix inversions during inference, the flow is integrated v
    $$z^* = z_{1/2} A_J^T + \Delta t B(z_{1/2}) x_t, \quad A_J = \left(I - \frac{\Delta t}{2} J\right)^{-1} \left(I + \frac{\Delta t}{2} J\right) \in \mathrm{SO}(D)$$
 3. **Second Half-Step Radial Dissipation ($\Psi_{\Delta t / 2}^R$):**
    $$z_{t+1} = \frac{z^*}{1 + \frac{\Delta t}{2} r(z^*)}$$
+
+<p align="center">
+  <img src="assets/complex_eigenvalue_spectrum.png" alt="Complex Eigenvalue Spectrum in Unit Disk" width="550"/>
+</p>
+
+---
+
+## Inter-Layer Tensor Memory Capacity $\mathcal{M}(k, l)$
+
+We evaluate long-range inter-layer memory through the **True Tensor Memory Metric**:
+
+$$\mathcal{M}(k, l) = \mathcal{R}^2(h_k \mid h_l) \times \left(\frac{\min(\mathrm{erank}(h_k), \mathrm{erank}(h_l))}{D}\right) \times \left(1 - e^{-\mathcal{W}(k, l)}\right)$$
+
+where $\mathcal{W}(k, l) = \frac{\|h_l - h_k\|_F}{\|h_k\|_F}$ measures actual transformation work, penalizing passive identity highways.
+
+<p align="center">
+  <img src="assets/tensor_memory_capacity_matrix.png" alt="Tensor Memory Capacity Heatmap" width="650"/>
+</p>
 
 ---
 
@@ -122,11 +148,17 @@ output, last_state = model(x)
 ## Repository Structure
 
 ```
+├── assets/
+│   ├── energy_trajectory_comparison.png   # Energy bounds under distractor bursts
+│   ├── effective_rank_spectrum.png        # Singular value & Roy-Vetterli erank
+│   ├── complex_eigenvalue_spectrum.png    # Complex unit disk spectrum
+│   └── tensor_memory_capacity_matrix.png  # Inter-layer M(k, l) capacity matrix
 ├── ph_ssm/
 │   ├── __init__.py       # Package exports
 │   ├── model.py          # PortHamiltonianSSM PyTorch module
 │   └── metrics.py        # Effective Rank & True Tensor Memory Metric M(k, l)
 ├── benchmark.py          # Verifiable 1000-step continuous horizon benchmark
+├── generate_visuals.py   # Script to regenerate all publication assets
 ├── pyproject.toml        # Package build metadata
 ├── LICENSE               # MIT License
 └── README.md             # Theoretical derivation & verification
