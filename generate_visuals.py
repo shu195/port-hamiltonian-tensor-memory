@@ -248,7 +248,7 @@ def generate_gradient_flow_plot():
     ax1.grid(True, which="both", ls="--", color='#222222')
     ax1.legend(loc='upper left', fontsize=8.0, framealpha=0.85, facecolor='#111111', edgecolor='#444444')
 
-    ax1.annotate('ResNet Explosion:\n+272,000x Norm spike', xy=(5000, 1.542e6), xytext=(950, 1.5e5),
+    ax1.annotate('ResNet Explosion:\n+272,000x Norm spike', xy=(5000, 1.542e6), xytext=(1500, 2.2e3),
                  arrowprops=dict(facecolor='#ff4444', shrink=0.08, width=1.2, headwidth=6),
                  fontsize=8.5, color='#ff6666', fontweight='bold')
     ax1.annotate('PH-SSM Equilibrium Flow:\n0.0166% (<0.017%) drift over 10k steps', xy=(10000, 5.657792), xytext=(450, 18.0),
@@ -337,9 +337,9 @@ def generate_horizon_and_gpu_benchmarks_plot():
     ax2.set_xticklabels(tasks, fontsize=9.5, color='#cccccc')
     ax2.set_title('Controlled Tesla T4 GPU Benchmarks: Vision & Long Sequences', fontsize=12, fontweight='bold', color='#ffffff', pad=10)
     ax2.set_ylabel('Performance Metric (% Acc / Scaled 1/MSE)', fontsize=10.5, color='#cccccc')
-    ax2.set_ylim(0, 115)
+    ax2.set_ylim(0, 122)
     ax2.grid(True, axis='y', color='#222222')
-    ax2.legend(loc='upper left', fontsize=8.5, framealpha=0.35, edgecolor='#444444')
+    ax2.legend(loc='upper right', fontsize=8.5, framealpha=0.6, facecolor='#111111', edgecolor='#444444')
 
     ax2.text(x2[0] - w2/2, 28, "26.33%", ha='center', fontsize=8.8, color='#ff8888', fontweight='bold')
     ax2.text(x2[0] + w2/2, 99, "97.67%\n(+71.34%)", ha='center', fontsize=8.8, color='#00e676', fontweight='bold')
