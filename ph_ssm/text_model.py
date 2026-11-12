@@ -95,25 +95,40 @@ class MultiHeadCartanChannelRotor(nn.Module):
 
     def forward(self, q: torch.Tensor, p: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
         *batch_dims, _ = q.shape
-        q_h = q.view(*batch_dims, self.n_heads, self.head_dim)
-        p_h = p.view(*batch_dims, self.n_heads, self.head_dim)
+        n_batch = math.prod(batch_dims)
+        q_h = q.reshape(n_batch, self.n_heads, self.head_dim).transpose(0, 1)
+        p_h = p.reshape(n_batch, self.n_heads, self.head_dim).transpose(0, 1)
         U_r, U_i = self.get_unitary_matrices()
 
-        q_rot = torch.einsum('...hn, hmn -> ...hm', q_h, U_r) - torch.einsum('...hn, hmn -> ...hm', p_h, U_i)
-        p_rot = torch.einsum('...hn, hmn -> ...hm', q_h, U_i) + torch.einsum('...hn, hmn -> ...hm', p_h, U_r)
+        # Single fused 2x2 block-symplectic BMM: (H, B*T, 2*D_h) @ (H, 2*D_h, 2*D_h)
+        U_r_T = U_r.transpose(-1, -2)
+        U_i_T = U_i.transpose(-1, -2)
+        top = torch.cat([U_r_T, U_i_T], dim=-1)
+        bot = torch.cat([-U_i_T, U_r_T], dim=-1)
+        M = torch.cat([top, bot], dim=-2)
+        qp = torch.cat([q_h, p_h], dim=-1)
+        qp_rot = torch.bmm(qp, M)
 
-        return q_rot.reshape(*batch_dims, self.n_nodes), p_rot.reshape(*batch_dims, self.n_nodes)
+        q_rot = qp_rot[..., :self.head_dim].transpose(0, 1).reshape(*batch_dims, self.n_nodes)
+        p_rot = qp_rot[..., self.head_dim:].transpose(0, 1).reshape(*batch_dims, self.n_nodes)
+        return q_rot, p_rot
 
     def inverse(self, q_rot: torch.Tensor, p_rot: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
         *batch_dims, _ = q_rot.shape
-        q_h = q_rot.view(*batch_dims, self.n_heads, self.head_dim)
-        p_h = p_rot.view(*batch_dims, self.n_heads, self.head_dim)
+        n_batch = math.prod(batch_dims)
+        q_h = q_rot.reshape(n_batch, self.n_heads, self.head_dim).transpose(0, 1)
+        p_h = p_rot.reshape(n_batch, self.n_heads, self.head_dim).transpose(0, 1)
         U_r, U_i = self.get_unitary_matrices()
 
-        q_inv = torch.einsum('...hm, hmn -> ...hn', q_h, U_r) + torch.einsum('...hm, hmn -> ...hn', p_h, U_i)
-        p_inv = -torch.einsum('...hm, hmn -> ...hn', q_h, U_i) + torch.einsum('...hm, hmn -> ...hn', p_h, U_r)
+        top = torch.cat([U_r, -U_i], dim=-1)
+        bot = torch.cat([U_i, U_r], dim=-1)
+        M_inv = torch.cat([top, bot], dim=-2)
+        qp = torch.cat([q_h, p_h], dim=-1)
+        qp_inv = torch.bmm(qp, M_inv)
 
-        return q_inv.reshape(*batch_dims, self.n_nodes), p_inv.reshape(*batch_dims, self.n_nodes)
+        q_inv = qp_inv[..., :self.head_dim].transpose(0, 1).reshape(*batch_dims, self.n_nodes)
+        p_inv = qp_inv[..., self.head_dim:].transpose(0, 1).reshape(*batch_dims, self.n_nodes)
+        return q_inv, p_inv
 
 
 class CartanBlock(nn.Module):

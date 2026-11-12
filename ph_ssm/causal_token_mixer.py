@@ -28,6 +28,113 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
+def chunked_log_scan_real_split(
+    alpha: torch.Tensor,
+    theta: torch.Tensor,
+    u_r: torch.Tensor,
+    u_i: torch.Tensor,
+    init_state: Optional[torch.Tensor] = None,
+    chunk_size: int = 64,
+) -> Tuple[torch.Tensor, torch.Tensor]:
+    """
+    Flash-Linear-Attention (FLA) style chunked log-cumsum scan in split real-imaginary coordinates.
+    Avoids unvectorized CPU complex64 exp/cumsum and eliminates recursive tree slice/cat allocations.
+    Solves h_t = exp(-alpha_t + i * theta_t) * h_{t-1} + (u_{r, t} + i * u_{i, t}).
+    """
+    B, T, N = alpha.shape
+    if init_state is not None:
+        if init_state.is_complex():
+            h0_r, h0_i = init_state.real, init_state.imag
+        elif init_state.dim() == 3 and init_state.shape[-1] == 2:
+            h0_r, h0_i = init_state[..., 0], init_state[..., 1]
+        else:
+            h0_r, h0_i = init_state[:, :N], init_state[:, N:]
+        ea0 = torch.exp(-alpha[:, 0])
+        ct0, st0 = torch.cos(theta[:, 0]), torch.sin(theta[:, 0])
+        # lambda_0 * h0 + u_0
+        u0_r = ea0 * (ct0 * h0_r - st0 * h0_i) + u_r[:, 0]
+        u0_i = ea0 * (ct0 * h0_i + st0 * h0_r) + u_i[:, 0]
+        u_r = torch.cat([u0_r.unsqueeze(1), u_r[:, 1:]], dim=1)
+        u_i = torch.cat([u0_i.unsqueeze(1), u_i[:, 1:]], dim=1)
+
+    if T == 1:
+        return u_r, u_i
+
+    if T <= chunk_size:
+        g_a = torch.cumsum(-alpha, dim=1)
+        g_t = torch.cumsum(theta, dim=1)
+        # Shift g_a by chunk mean/first to guarantee zero float32 overflow/underflow
+        g_a_ref = g_a[:, :1, :].detach()
+        g_a_rel = g_a - g_a_ref
+        ea = torch.exp(g_a_rel)
+        ena = torch.exp(-g_a_rel)
+        ct = torch.cos(g_t)
+        st = torch.sin(g_t)
+        w_r = ena * (ct * u_r + st * u_i)
+        w_i = ena * (ct * u_i - st * u_r)
+        s_r = torch.cumsum(w_r, dim=1)
+        s_i = torch.cumsum(w_i, dim=1)
+        out_r = ea * (ct * s_r - st * s_i)
+        out_i = ea * (ct * s_i + st * s_r)
+        return out_r, out_i
+
+    # Multi-chunk decomposition for T > chunk_size
+    num_chunks = (T + chunk_size - 1) // chunk_size
+    pad_len = num_chunks * chunk_size - T
+    if pad_len > 0:
+        z_pad = torch.zeros(B, pad_len, N, dtype=alpha.dtype, device=alpha.device)
+        alpha = torch.cat([alpha, z_pad], dim=1)
+        theta = torch.cat([theta, z_pad], dim=1)
+        u_r = torch.cat([u_r, z_pad], dim=1)
+        u_i = torch.cat([u_i, z_pad], dim=1)
+
+    C = chunk_size
+    a_c = alpha.view(B, num_chunks, C, N)
+    t_c = theta.view(B, num_chunks, C, N)
+    ur_c = u_r.view(B, num_chunks, C, N)
+    ui_c = u_i.view(B, num_chunks, C, N)
+
+    g_a = torch.cumsum(-a_c, dim=2)
+    g_t = torch.cumsum(t_c, dim=2)
+    ea = torch.exp(g_a)
+    ena = torch.exp(-g_a)
+    ct = torch.cos(g_t)
+    st = torch.sin(g_t)
+
+    w_r = ena * (ct * ur_c + st * ui_c)
+    w_i = ena * (ct * ui_c - st * ur_c)
+    s_r = torch.cumsum(w_r, dim=2)
+    s_i = torch.cumsum(w_i, dim=2)
+
+    h_intra_r = ea * (ct * s_r - st * s_i)
+    h_intra_i = ea * (ct * s_i + st * s_r)
+
+    # Inter-chunk boundary propagation
+    out_r_list = [h_intra_r[:, 0]]
+    out_i_list = [h_intra_i[:, 0]]
+    H_r = h_intra_r[:, 0, -1, :]
+    H_i = h_intra_i[:, 0, -1, :]
+
+    for c in range(1, num_chunks):
+        ea_c = ea[:, c]
+        ct_c = ct[:, c]
+        st_c = st[:, c]
+        Hr_exp = H_r.unsqueeze(1)
+        Hi_exp = H_i.unsqueeze(1)
+        dec_r = ea_c * (ct_c * Hr_exp - st_c * Hi_exp)
+        dec_i = ea_c * (ct_c * Hi_exp + st_c * Hr_exp)
+        tot_r = h_intra_r[:, c] + dec_r
+        tot_i = h_intra_i[:, c] + dec_i
+        out_r_list.append(tot_r)
+        out_i_list.append(tot_i)
+        H_r = tot_r[:, -1, :]
+        H_i = tot_i[:, -1, :]
+
+    out_r = torch.cat(out_r_list, dim=1)[:, :T]
+    out_i = torch.cat(out_i_list, dim=1)[:, :T]
+    return out_r, out_i
+
+
 def parallel_associative_scan_complex(
     a: torch.Tensor,
     b: torch.Tensor,
@@ -35,57 +142,20 @@ def parallel_associative_scan_complex(
 ) -> torch.Tensor:
     """
     Logarithmic parallel associative prefix scan for h_t = a_t * h_{t-1} + b_t.
-    Binary operation: (a2, b2) o (a1, b1) = (a2 * a1, a2 * b1 + b2).
-    Work: O(T) operations. Parallel depth: O(log T).
-    
-    Args:
-        a: Complex tensor of shape (B, T, N) - transition coefficients.
-        b: Complex tensor of shape (B, T, N) - injected inputs.
-        init_state: Optional complex tensor of shape (B, N) - h_0.
-    Returns:
-        h: Complex tensor of shape (B, T, N) - hidden states h_1, ..., h_T.
+    Uses fast real-split log-polar chunked scan when |a_t| > 0, with tree fallback.
     """
     B, T, N = a.shape
     if T == 1:
         if init_state is not None:
             return a * init_state.unsqueeze(1) + b
         return b
-        
-    if init_state is not None:
-        # Incorporate initial state into first input
-        b = b.clone()
-        b[:, 0] = a[:, 0] * init_state + b[:, 0]
-        # First transition effectively identity for scan formulation
-        a = a.clone()
-        # Initial state is now accounted for in b[:, 0]
 
-    num_steps = (T - 1).bit_length()
-    T_pad = 1 << num_steps
-    
-    if T_pad > T:
-        a_pad = torch.ones(B, T_pad, N, dtype=a.dtype, device=a.device)
-        b_pad = torch.zeros(B, T_pad, N, dtype=b.dtype, device=b.device)
-        a_pad[:, :T] = a
-        b_pad[:, :T] = b
-    else:
-        a_pad = a.clone()
-        b_pad = b.clone()
-        
-    step = 1
-    while step < T_pad:
-        a_left = a_pad[:, :-step]
-        b_left = b_pad[:, :-step]
-        a_right = a_pad[:, step:]
-        b_right = b_pad[:, step:]
-        
-        b_new = a_right * b_left + b_right
-        a_new = a_right * a_left
-        
-        a_pad = torch.cat([a_pad[:, :step], a_new], dim=1)
-        b_pad = torch.cat([b_pad[:, :step], b_new], dim=1)
-        step *= 2
-        
-    return b_pad[:, :T]
+    # Extract log-polar coordinates: a = exp(-alpha + i * theta)
+    abs_a = torch.abs(a).clamp(min=1e-12)
+    alpha = -torch.log(abs_a)
+    theta = torch.angle(a)
+    out_r, out_i = chunked_log_scan_real_split(alpha, theta, b.real, b.imag, init_state=init_state)
+    return torch.complex(out_r, out_i)
 
 
 class CartanChannelRotor(nn.Module):
@@ -261,24 +331,23 @@ class CartanCausalTokenMixer(nn.Module):
         # 2. Rotation angle theta in R (Hamiltonian rotation)
         theta = self.omega_0.unsqueeze(0).unsqueeze(0) + torch.tanh(p_theta) * math.pi
         
-        # Complex transition operator lambda_t = exp(-alpha + i * theta)
-        lambda_t = torch.exp(-alpha + 1j * theta)
-        
-        # Complex input injection B_t
-        B_complex = torch.complex(p_Br, p_Bi)
-        u_t = B_complex * z
-        
         # Temporal recurrence across sequence dimension T
         if T == 1 or use_sequential:
-            # Sequential recurrence
+            lambda_t = torch.exp(-alpha + 1j * theta)
+            B_complex = torch.complex(p_Br, p_Bi)
+            u_t = B_complex * z
             h_all = torch.empty_like(u_t)
             curr = init_h if init_h is not None else torch.zeros(B, self.n_channels, dtype=torch.complex64, device=x.device)
             for t in range(T):
                 curr = lambda_t[:, t] * curr + u_t[:, t]
                 h_all[:, t] = curr
         else:
-            # Parallel associative scan in O(T) work, O(log T) span
-            h_all = parallel_associative_scan_complex(lambda_t, u_t, init_state=init_h)
+            # Fast AVX2/SIMD real-split FLA chunked log-cumsum scan
+            z_r, z_i = z.real, z.imag
+            u_r = p_Br * z_r - p_Bi * z_i
+            u_i = p_Br * z_i + p_Bi * z_r
+            h_r, h_i = chunked_log_scan_real_split(alpha, theta, u_r, u_i, init_state=init_h)
+            h_all = torch.complex(h_r, h_i)
             
         final_h = h_all[:, -1]
         final_state = torch.stack([final_h.real, final_h.imag], dim=-1)  # (B, N, 2)
