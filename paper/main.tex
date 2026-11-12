@@ -407,7 +407,7 @@ Because $|\tanh(q_i)| \le 1$ and $|\sin(\omega_i q_i + \phi_i)| \le 1$, the kick
 
 \node[stagebox, below=of k1] (ssm) {
     \textbf{Stage 2: Causal Complex SSM Sequence Mixer (\texttt{CartanCausalTokenMixer})} ($\mathcal{O}(T)$ FLA Scan)\newline
-    $m_{1:T},\, h_T = \mathrm{CausalCartanSSM}(p_1; h_0), \qquad q_2 = q_1 + \Delta t \cdot m_{1:T}, \qquad \left\|\frac{\partial q_{2,t}}{\partial p_{1,t+k}}\right\| \equiv 0 \;\; (\forall k \ge 1)$
+    $m_{1:T},\, h_T = \mathrm{CausalCartanSSM}(p_1; h_0), \quad q_2 = q_1 + \Delta t \cdot m_{1:T}, \quad \left\|\frac{\partial q_{2,t}}{\partial p_{1,t+k}}\right\| \equiv 0 \; (\forall k \ge 1)$
 };
 
 \node[stagebox, below=of ssm] (damp) {
@@ -440,6 +440,7 @@ Because $|\tanh(q_i)| \le 1$ and $|\sin(\omega_i q_i + \phi_i)| \le 1$, the kick
 
 As depicted in Figure~\ref{fig:cartan_block_diagram}, \texttt{CartanLM} maps input token indices $\mathrm{idx} \in \{0,\dots,|V|-1\}^{B\times T}$ through a token embedding table $E \in \mathbb{R}^{|V|\times 2N}$, passes the phase state $z^{(0)} = (q^{(0)}, p^{(0)})$ through a stack of $L$ causal \texttt{CartanBlock} layers, applies \texttt{RMSNorm}, and projects back to vocabulary logits via a weight-tied language model head ($W_{\text{head}} \equiv E$).
 
+\clearpage
 % =============================================================================
 \section{Holographic Zero-Activation Reversibility and FLA Chunked Scan}
 \label{sec:holographic_inversion}
@@ -453,8 +454,8 @@ Because Stages 1--5 of the \texttt{CartanBlock} are structured as triangular she
 Given only the output state $z_{\text{out}} = (q_4, p_4) \in \mathbb{R}^{B\times T\times 2N}$ of a \texttt{CartanBlock}, the exact input state $z_{\text{in}} = (q, p)$ is recovered analytically in 5 reverse steps with $\mathcal{O}(1)$ activation memory:
 \begin{align}
     \text{1. Undo Kick 2:} \quad & q_3 = q_4, \quad p_3 = p_4 + \frac{\Delta t}{2}\big(\chi \odot \tanh(q_4) + \gamma \odot \sin(\omega \odot q_4 + \phi)\big), \\
-    \text{2. Undo } \mathrm{U}(N)\text{ Rotor:} \quad & \begin{bmatrix} q_2 & p_2 \end{bmatrix} = \begin{bmatrix} q_3 & p_3 \end{bmatrix} \begin{bmatrix} U_r & -U_i \\ U_i & U_r \end{bmatrix} \qquad (\text{since } U^{-1} = U^\dagger = U_r^\top - i U_i^\top), \\
-    \text{3. Undo Radial Damping:} \quad & p_1 = p_2 \odot \exp\big(+\gamma(q_2)\Delta t\big) \qquad (\text{since } \gamma(q_2) \text{ depends only on } q_2!), \\
+    \text{2. Undo } \mathrm{U}(N)\text{ Rotor:} \quad & \begin{bmatrix} q_2 & p_2 \end{bmatrix} = \begin{bmatrix} q_3 & p_3 \end{bmatrix} \begin{bmatrix} U_r & -U_i \\ U_i & U_r \end{bmatrix} \quad (U^{-1} = U^\dagger), \\
+    \text{3. Undo Radial Damping:} \quad & p_1 = p_2 \odot \exp\big(+\gamma(q_2)\Delta t\big) \quad (\gamma(q_2)\text{ uses } q_2\text{ only}), \\
     \text{4. Undo Causal SSM:} \quad & m_{1:T},\, \_ = \mathrm{CausalCartanSSM}(p_1), \quad q_1 = q_2 - \Delta t \cdot m_{1:T}, \\
     \text{5. Undo Kick 1:} \quad & q_0 = q_1, \quad p_0 = p_1 + \frac{\Delta t}{2}\big(\chi \odot \tanh(q_1) + \gamma \odot \sin(\omega \odot q_1 + \phi)\big).
 \end{align}
@@ -626,7 +627,7 @@ Finally, we evaluate the complete autoregressive \texttt{CartanLanguageModel} (\
 \end{figure}
 
 \subsection{Experiment 5: Verification of the 5 End-to-End Architectural Invariants}
-Table~\ref{tab:unit_test_invariants} reports the verbatim output of our automated verification suite (\texttt{test\_\allowbreak cartan\_\allowbreak language\_\allowbreak model.py}) alongside the before/after profiling metrics of our FLA real-split chunked scan optimization.
+Table~\ref{tab:unit_test_invariants} reports our automated verification suite (\texttt{test\_\allowbreak cartan\_\allowbreak language\_\allowbreak model.py}) and the FLA real-split kernel speedup.
 
 \begin{table}[htbp]
 \centering
