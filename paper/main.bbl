@@ -29,7 +29,7 @@ Tri Dao and Albert Gu.
 \newblock Transformers are {SSM}s: Generalized models and efficient algorithms
   through structured state space duality.
 \newblock In {\em Proceedings of the 41st International Conference on Machine
-  Learning (ICML)}, volume 235, pages 9809--9832. PMLR, 2024.
+  Learning (ICML)}, volume 235, pages 10041--10071. PMLR, 2024.
 
 \bibitem{dong2021attention}
 Yihe Dong, Jean-Baptiste Cordonnier, and Andreas Loukas.
@@ -72,8 +72,9 @@ Zhengdao Chen, Jianyu Zhang, Martin Arjovsky, and L{\'e}on Bottou.
 \bibitem{rusch2024oscillatory}
 T.~Konstantin Rusch and Daniela Rus.
 \newblock Oscillatory state-space models.
-\newblock In {\em Proceedings of the 41st International Conference on Machine
-  Learning (ICML)}, volume 235, pages 42751--42776. PMLR, 2024.
+\newblock In {\em International Conference on Learning Representations (ICLR)},
+  2025.
+\newblock arXiv:2410.03943.
 
 \bibitem{roy2007effective}
 Olivier Roy and Martin Vetterli.
@@ -101,13 +102,25 @@ Arjan van~der Schaft and Dimitri Jeltsema.
 \newblock {\em Foundations and Trends in Systems and Control}, 1(2-3):173--378,
   2014.
 
+\bibitem{massaroli2019porthamiltonian}
+Stefano Massaroli, Michael Poli, Federico Califano, Angela Faragasso, Jinkyoo
+  Park, Atsushi Yamashita, and Hajime Asama.
+\newblock Port-{H}amiltonian approach to neural network training.
+\newblock In {\em Proceedings of the 58th IEEE Conference on Decision and
+  Control (CDC)}, pages 6799--6806. IEEE, 2019.
+
 \bibitem{massaroli2020dissecting}
 Stefano Massaroli, Michael Poli, Jinkyoo Park, Atsushi Yamashita, and Hajime
   Asama.
-\newblock Dissecting complementary and port-{H}amiltonian neural networks.
-\newblock In {\em Proceedings of the 21st IFAC World Congress}, pages
-  1098--1103, 2020.
-\newblock arXiv:1911.08272.
+\newblock Dissecting neural {ODE}s.
+\newblock In {\em Advances in Neural Information Processing Systems (NeurIPS)},
+  volume~33, pages 3952--3963, 2020.
+
+\bibitem{yang2024fla}
+Songlin Yang and Yu~Zhang.
+\newblock {FLA}: A {T}riton-based library for hardware-efficient linear
+  attention and state-space models.
+\newblock \url{https://github.com/fla-org/flash-linear-attention}, 2024.
 
 \bibitem{desai2021porthamiltonian}
 Saurabh Desai, Marios Mattheakis, Hjorleifur Eyjolfsdottir, Frank Protopapas,

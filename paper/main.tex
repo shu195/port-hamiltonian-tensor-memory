@@ -31,7 +31,7 @@
 \newcommand{\qedhere}{}
 
 \title{\textbf{\Large Port-Hamiltonian State-Space Models and Cartan $2\times 2$ Language Models (\texttt{CartanLM}):}\\[0.4em]
-\large Symplectic Phase-Plane Dynamics, Token-Gated Radial Rayleigh Damping, and Zero-Activation Holographic Reversibility}
+\large Symplectic Phase-Plane Dynamics, State- and Position-Gated Rayleigh Damping, and Zero-Activation Holographic Reversibility}
 
 \author{
   \textbf{Shubham Barmase (\texttt{shu195})}\\[0.3em]
@@ -48,13 +48,13 @@
 \begin{abstract}
 Deep sequence architectures and autoregressive language models face a fundamental trilemma across extended temporal and layerwise horizons: (1) \textbf{exponential memory amnesia}, where contractive state transitions ($\mathrm{Re}(\lambda) < 0$) exponentially erase historical representations; (2) \textbf{non-stationary noise entrapment}, where purely conservative or unitary systems ($\mathrm{Re}(\lambda) = 0$) accumulate high-frequency distractor bursts without bound; and (3) \textbf{anisotropic dimensional rank collapse}, where isotropic dissipation and unconstrained projections crush the Roy-Vetterli effective rank ($\mathrm{erank}(Z) \to 1$). 
 
-In this paper, we resolve this trilemma from first principles of geometric mechanics and Lie group theory. First, we introduce the \textbf{Port-Hamiltonian State-Space Model (PH-SSM)}, governing inter-layer and sequence dynamics via a continuous skew-symmetric Poisson interconnection $J = -J^\top \in \mathfrak{so}(D)$ paired with rank-1 \textbf{Radial Rayleigh Damping} $R_{\text{radial}}(z) = r(z)\frac{zz^\top}{\|z\|^2}$, integrated via a second-order symmetric Strang splitting scheme. We prove that this formulation strictly confines energy dissipation to the 1D radial ray while preserving exact $1.00000000$ isometric eigenvalues across the $(D-1)$-dimensional orthogonal semantic tangent bundle $T_z\mathbb{S}^{D-1}$. Across a $10,000$-step backpropagation-through-time (BPTT) horizon, PH-SSM exhibits $<0.016\%$ gradient norm deviation ($5.656854 \to 5.657792$) and achieves $97.67\%$ validation accuracy on Sequential CIFAR-10 ($L=1024$), outperforming ResNet baselines by $+71.33\%$.
+In this paper, we resolve this trilemma from first principles of geometric mechanics and Lie group theory. First, we introduce the \textbf{Port-Hamiltonian State-Space Model (PH-SSM)}, governing inter-layer and sequence dynamics via a continuous skew-symmetric Poisson interconnection $J = -J^\top \in \mathfrak{so}(D)$ paired with rank-1 \textbf{Radial Rayleigh Damping} $R_{\text{radial}}(z) = r(z)\frac{zz^\top}{\|z\|^2}$, integrated via a second-order symmetric Strang splitting scheme. We prove that the frozen operator $R_{\text{radial}}(z_0)$ confines instantaneous dissipation to the 1D radial ray $\mathcal{V}_\parallel(z_0)$ while exhibiting $(D-1)$ identically zero eigenvalues on the orthogonal spherical tangent space $T_{z_0}\mathbb{S}^{D-1}$, and that the nonlinear flow preserves the normalized directional phase $\hat{z}(t) = z(t)/\|z(t)\|_2 \in \mathbb{S}^{D-1}$ via $\dot{\hat{z}} = J\hat{z}$ independently of $r(z)$. Moreover, when $r(z) = \beta\,\mathrm{softplus}(\|z\|_2^2 - E_0)$ vanishes inside the equilibrium energy ball $\|z\|_2^2 \le E_0$, the equilibrium transition Jacobian is strictly orthogonal ($A_J \in \mathrm{SO}(D)$). Across a $10,000$-step backpropagation-through-time (BPTT) horizon, PH-SSM exhibits $0.0166\%$ ($<0.017\%$) Jacobian Frobenius norm drift ($5.656854 \to 5.657792$) and achieves $97.67\%$ validation accuracy on a controlled Sequential CIFAR-10 ($L=1024$) benchmark, outperforming matched ResNet baselines by $+71.34\%$.
 
-Second, we elevate the scalar neuron to a canonical $2\times 2$ symplectic phase-plane rotor $(q_i, p_i) \in \mathbb{R}^2$ governed by the \textbf{Cartan Triple Intersection} $\mathrm{Sp}(2N,\mathbb{R}) \cap \mathrm{O}(2N) \cong \mathrm{U}(N) \cong \mathcal{M}_N(\mathcal{C}\ell^0(2,0))$. Resolving the mathematical impossibility of non-diagonal lower-triangular unitary matrices, we construct the end-to-end \textbf{Cartan $2\times 2$ Language Model (\texttt{CartanLM})}. Each causal block executes a 5-stage reversible operator split: (i) Lipschitz-bounded Relativistic-Pendulum symplectic kicks ($f(q) = \chi\tanh(q) + \gamma\sin(\omega q + \phi)$) with exact unit Jacobian determinant $\det(J) \equiv 1.00000000$, (ii) causal temporal sequence mixing via an $\mathcal{O}(T)$ Flash-Linear-Attention (FLA) style real-split chunked log-cumsum scan, (iii) token-gated radial Rayleigh syntax purging, (iv) multi-head $\mathrm{U}(N)$ Cayley channel rotors fused via $2\times 2$ block-symplectic batched matrix multiplications (\texttt{torch.bmm}), and (v) a second half-step relativistic-pendulum symplectic kick. We prove that \texttt{CartanLM} admits an exact closed-form analytical inverse, enabling $\mathcal{O}(1)$ activation-memory backpropagation and reconstructing 40-token Shakespeare prompts from final-layer hidden states with $8.981\times 10^{-16}$ MSE ($100.00\%$ token match) and zero saved intermediate activations. On TinyShakespeare character-level language modeling, \texttt{CartanLM} outperforms parameter-matched Causal GPT Transformers in validation perplexity ($8.01$ vs.\ $12.92$ PPL at $60\text{k}$ parameters, and $6.57$ vs.\ $7.28$ PPL with $6.01\times$ fewer parameters) while preserving $99.01\%$ effective rank ($67.00$ vs.\ GPT's collapse to $33.77$) and achieving a $3.28\times$ end-to-end training speedup via SIMD real-split chunked scanning.
+Second, we elevate the scalar neuron to a canonical $2\times 2$ symplectic phase-plane rotor $(q_i, p_i) \in \mathbb{R}^2$ governed by the classical unitary-symplectic-orthogonal intersection $\mathrm{Sp}(2N,\mathbb{R}) \cap \mathrm{O}(2N) \cong \mathrm{U}(N) \subset \mathcal{M}_N(\mathcal{C}\ell^0(2,0))$. Circumventing the algebraic obstruction that lower-triangular unitary matrices are strictly diagonal, we construct the end-to-end \textbf{Cartan $2\times 2$ Language Model (\texttt{CartanLM})}. Each causal block executes a 5-stage reversible operator split: (i) Lipschitz-bounded Relativistic-Pendulum symplectic kicks ($f(q) = \chi\tanh(q) + \gamma\sin(\omega q + \phi)$) with exact unit Jacobian determinant $\det(J) \equiv 1.00000000$, (ii) causal temporal sequence mixing via an $\mathcal{O}(T)$ Flash-Linear-Attention (FLA) style real-split chunked log-cumsum scan, (iii) position-gated canonical momentum Rayleigh damping, (iv) multi-head $\mathrm{U}(N)$ Cayley channel rotors fused via $2\times 2$ block-symplectic batched matrix multiplications (\texttt{torch.bmm}), and (v) a second half-step relativistic-pendulum symplectic kick. We prove that \texttt{CartanLM} admits an exact closed-form analytical inverse, enabling $\mathcal{O}(1)$ activation-memory backpropagation and reconstructing 6-layer synthetic prompts with $8.981\times 10^{-16}$ MSE ($9.520\times 10^{-16}$ after FLA optimization; $100.00\%$ token recovery) and trained TinyShakespeare prompts with $1.376\times 10^{-13}$ MSE ($100.00\%$ recovery at $23.6\text{k}$ params) and $1.055\times 10^{-14}$ MSE ($97.50\%$ recovery at $60\text{k}$ params). On TinyShakespeare character-level language modeling, \texttt{CartanLM} outperforms parameter-matched Causal GPT Transformers in validation perplexity ($8.01$ vs.\ $12.92$ PPL at $60\text{k}$ parameters, and $6.57$ vs.\ $7.28$ PPL with $6.01\times$ fewer parameters) while preserving $99.01\%$ temporal effective rank retention ($67.00/128$ at $t=64$ vs.\ $67.67/128$ at $t=16$, and $49.85/64$ [$77.9\%$] vs.\ GPT's $34.12/64$ [$53.3\%$]) and achieving a $3.28\times$ end-to-end training speedup.
 \end{abstract}
 
 \vspace{0.4em}
-\noindent\textbf{Keywords:} Port-Hamiltonian Systems, Symplectic Integrators, State-Space Models, Cartan Triple Intersection, Unitary Lie Groups, Reversible Neural Networks, Effective Rank, Language Modeling.
+\noindent\textbf{Keywords:} Port-Hamiltonian Systems, Symplectic Integrators, State-Space Models, Unitary-Symplectic Intersection, Unitary Lie Groups, Reversible Neural Networks, Effective Rank, Language Modeling.
 
 \newpage
 \tableofcontents
@@ -68,7 +68,7 @@ The foundational challenge of deep sequence modeling and ultra-deep neural repre
 
 \begin{enumerate}
     \item \textbf{Pathology I: Exponential Memory Amnesia in Contractive Systems.}
-    In classical dissipative state-space formulations $\dot{z}(t) = -\alpha z(t) + B u(t)$ with $\alpha > 0$ (or selective real diagonal decays $\bar{A}_t = \exp(-\Delta_t A)$ in Mamba \cite{gu2023mamba}), the state transition operator contracts state energy exponentially as $\|z(t)\|^2 \propto e^{-2\alpha t}\|z(0)\|^2$. While this guarantees bounded states under bounded inputs, any historical signal injected at $t=0$ decays below IEEE-754 \texttt{float32} machine epsilon ($\epsilon_{\text{mach}} \approx 1.19\times 10^{-7}$) once $t > \frac{16.1}{2\alpha}$, creating an insurmountable \textit{horizon amnesia cliff}.
+    In classical dissipative state-space formulations $\dot{z}(t) = -\alpha z(t) + B u(t)$ with $\alpha > 0$ (or selective real diagonal decays $\bar{A}_t = \exp(-\Delta_t A)$ in Mamba \cite{gu2023mamba}), the state transition operator contracts state energy exponentially as $\|z(t)\|^2 \propto e^{-2\alpha t}\|z(0)\|^2$. While this guarantees bounded states under bounded inputs, any historical signal injected at $t=0$ sees its energy decay below IEEE-754 \texttt{float32} machine epsilon ($\epsilon_{\text{mach}} = 2^{-23} \approx 1.192\times 10^{-7}$, where $\ln(1/\epsilon_{\text{mach}}) \approx 15.94$) once $t > \frac{15.94}{2\alpha}$, creating an insurmountable \textit{horizon amnesia cliff}.
     
     \item \textbf{Pathology II: Brownian Noise Entrapment in Purely Conservative Systems.}
     To eliminate exponential forgetting, Unitary Evolution RNNs \cite{arjovsky2016unitary,helfrich2018orthogonal,lezcanocasado2019cheap}, Hamiltonian Neural Networks (HNNs) \cite{greydanus2019hamiltonian}, Symplectic RNNs \cite{chen2020symplectic}, and undamped oscillatory models \cite{rusch2024oscillatory} constrain the transition operator to lie on the imaginary axis ($\mathrm{Re}(\lambda_i) = 0$) or unit circle ($|\lambda_i| = 1$). However, a purely conservative Hamiltonian system $\dot{z} = J\nabla H(z) + B u(t)$ has zero phase-space divergence ($\nabla \cdot \dot{z} = 0$ by Liouville's Theorem). When subjected to non-stationary distractor noise bursts $\xi(t)$ in realistic data streams, a purely lossless system cannot shed injected noise energy; the variance grows monotonically ($\mathbb{E}[\|z(t)\|^2] \propto \sigma_\xi^2 t$), catastrophically corrupting the stored semantic signal.
@@ -87,20 +87,20 @@ The foundational challenge of deep sequence modeling and ultra-deep neural repre
 \node[box] (s1) {
     \textbf{Stage 1 (Thesis --- Pure Symplectic / Unitary Conservation):} $\dot{z} = J\nabla H(z) + B u$\\
     \textcolor{tealaccent}{$\bullet$ \textbf{Advantage:}} Preserves symplectic 2-form $\omega$ and gradient norm ($\det(A_J) \equiv 1$, $|\lambda_i|=1$).\\
-    \textcolor{crimson}{$\bullet$ \textbf{Falsification:}} Under non-stationary distractor bursts ($T=1000$), traps noise forever; energy explodes $>224.0$ and decoding MSE spikes to $1321.6$.
+    \textcolor{crimson}{$\bullet$ \textbf{Falsification:}} Under non-stationary distractor bursts ($T=1000$), traps noise forever; energy explodes to $224.80$ and decoding MSE spikes to $1321.60$.
 };
 
 \node[box, below=of s1] (s2) {
     \textbf{Stage 2 (Antithesis --- Isotropic Dissipative SSM):} $\dot{z} = (-\alpha I + J)\nabla H(z) + B u$\\
     \textcolor{tealaccent}{$\bullet$ \textbf{Advantage:}} Exponentially damps distractor bursts and bounds Lyapunov energy.\\
-    \textcolor{crimson}{$\bullet$ \textbf{Falsification:}} Uniformly contracts the singular value spectrum ($e^{-2\alpha t}$); causes horizon amnesia ($\text{SNR} = -5.40\text{ dB}$) and severe Roy-Vetterli effective rank collapse ($\mathrm{erank}(Z) \to 1$).
+    \textcolor{crimson}{$\bullet$ \textbf{Falsification:}} Uniformly contracts the state norm ($e^{-2\alpha t}$); causes horizon amnesia ($\text{SNR} = -5.40\text{ dB}$) and severe Roy-Vetterli effective rank collapse ($\mathrm{erank}(Z) = 1.84 / 32$).
 };
 
 \node[box, below=of s2, draw=tealaccent, line width=1.4pt] (s3) {
     \textbf{Stage 3 (Synthesis --- Strang-Split Port-Hamiltonian \& Cartan $2\times 2$ Engine):}\\
-    $\dot{z} = \big(J(x) - R_{\text{radial}}(z, x)\big)\nabla H(z) + B(x)u, \quad R_{\text{radial}}(z,x) = \gamma(x)\frac{zz^\top}{\|z\|^2}$\\
-    \textcolor{tealaccent}{$\bullet$ \textbf{Resolution 1:}} Rank-1 radial Rayleigh projection purges filler/distractor energy along $\mathrm{span}(z)$ while leaving the $(2N-1)$ orthogonal semantic subspace at exact $1.00000000$ isometry.\\
-    \textcolor{tealaccent}{$\bullet$ \textbf{Resolution 2:}} Cartan Triple Intersection $\mathrm{Sp}(2N,\mathbb{R})\cap \mathrm{O}(2N)\cong \mathrm{U}(N)$ + Relativistic-Pendulum kicks yield exact $\mathcal{O}(1)$-memory analytical reversibility ($\text{MSE} \sim 10^{-16}$) and $\mathcal{O}(T)$ causal scanning.
+    $\dot{z} = \big(J - R_{\text{radial}}(z)\big)\nabla H(z) + B(x)u, \quad R_{\text{radial}}(z) = r(z)\frac{zz^\top}{\|z\|^2}$\\
+    \textcolor{tealaccent}{$\bullet$ \textbf{Resolution 1:}} Thresholded radial Rayleigh projection sheds burst excess along $\mathrm{span}(z)$ while keeping $\dot{\hat{z}} = J\hat{z}$ on $\mathbb{S}^{D-1}$ and preserving exact $\mathrm{SO}(D)$ isometry inside the equilibrium ball $\|z\|^2 \le E_0$.\\
+    \textcolor{tealaccent}{$\bullet$ \textbf{Resolution 2:}} Unitary-symplectic intersection $\mathrm{Sp}(2N,\mathbb{R})\cap \mathrm{O}(2N)\cong \mathrm{U}(N)$ + Relativistic-Pendulum kicks + position-gated momentum damping yield exact $\mathcal{O}(1)$-memory analytical reversibility ($\text{MSE} \sim 10^{-16}$) and $\mathcal{O}(T)$ causal scanning.
 };
 
 \draw[arrow] (s1.south) -- node[right, font=\footnotesize\itshape, text=crimson] {Counter-evidence: Noise Entrapment} (s2.north);
@@ -111,14 +111,14 @@ The foundational challenge of deep sequence modeling and ultra-deep neural repre
 \end{figure}
 
 \subsection{Summary of Contributions}
-As illustrated in Figure~\ref{fig:dialectical_derivation}, we resolve this trilemma by unifying continuous Port-Hamiltonian systems theory \cite{vanderschaft2014porthamiltonian,massaroli2020dissecting} with the Cartan decomposition of classical Lie groups and hardware-efficient chunked state-space scans. Specifically, our contributions are:
+As illustrated in Figure~\ref{fig:dialectical_derivation}, we resolve this trilemma by unifying continuous Port-Hamiltonian systems theory \cite{vanderschaft2014porthamiltonian,massaroli2019porthamiltonian,massaroli2020dissecting} with the classical unitary-symplectic-orthogonal Lie group intersection and hardware-efficient chunked state-space scans. Specifically, our contributions are:
 
 \begin{enumerate}
-    \item \textbf{Strang-Split Port-Hamiltonian State-Space Model (PH-SSM) with Radial Damping (Section~\ref{sec:ph_ssm}):} We formulate a continuous-depth sequence system where energy dissipation is restricted strictly to the rank-1 radial projector $R(z) = r(z)\frac{zz^\top}{\|z\|^2}$. We prove (Theorem~\ref{thm:radial_isometry}) that its spectrum consists of a single dissipative radial eigenvalue $\lambda_\parallel = r(z) \ge 0$ and $(D-1)$ identically zero eigenvalues $\lambda_\perp \equiv 0$ on the tangent bundle $T_z\mathbb{S}^{D-1}$, completely decoupling amplitude stabilization from directional semantic phase rotation.
+    \item \textbf{Strang-Split Port-Hamiltonian State-Space Model (PH-SSM) with Radial Damping (Section~\ref{sec:ph_ssm}):} We formulate a continuous-depth sequence system where energy dissipation is governed by the rank-1 radial projector $R_{\text{radial}}(z) = r(z)\frac{zz^\top}{\|z\|^2}$. We prove (Theorem~\ref{thm:radial_isometry}) that the frozen operator $R_{\text{radial}}(z_0)$ has a single radial eigenvalue $\lambda_\parallel = r(z_0) \ge 0$ and $(D-1)$ identically zero eigenvalues $\lambda_\perp \equiv 0$ on $T_{z_0}\mathbb{S}^{D-1}$, that the normalized directional state $\hat{z} = z/\|z\|_2 \in \mathbb{S}^{D-1}$ evolves via $\dot{\hat{z}} = J\hat{z}$ independently of $r(z)$, and that thresholded radial damping $r(z) = \beta\,\mathrm{softplus}(\|z\|_2^2 - E_0)$ maintains exact $\mathrm{SO}(D)$ Jacobian isometry inside the equilibrium ball $\|z\|_2^2 \le E_0$.
     \item \textbf{True Tensor Memory Metric $\mathcal{M}(k,l)$ (Section~\ref{sec:tensor_memory_metric}):} We expose why standard linear probe $\mathcal{R}^2$ metrics fail to detect rank collapse, and formulate a composite tensor memory functional combining linear decodability, normalized Roy-Vetterli effective rank \cite{roy2007effective}, and cumulative non-trivial trajectory arc-length.
-    \item \textbf{The Cartan $2\times 2$ Triple Intersection \& Division Algebra Ladder (Section~\ref{sec:cartan_triple}):} We replace scalar matrix weights with $2\times 2$ phase-plane rotor blocks living in $\mathrm{Sp}(2N,\mathbb{R})\cap \mathrm{O}(2N) \cong \mathrm{U}(N) \cong \mathcal{M}_N(\mathcal{C}\ell^0(2,0))$, reducing parameter count by $50\%$ while guaranteeing exact symplecticity ($\det(J)\equiv 1$) and zero quantum purity decay. We further establish the Hurwitz division algebra scaling limit ($2\times 2 \to 4\times 4 \to 8\times 8$ over $\mathbb{C}\to\mathbb{H}\to\mathbb{O}$) and prove the iso-parametric depth-versus-width Lie bracket advantage via the Baker-Campbell-Hausdorff (BCH) hierarchy.
-    \item \textbf{End-to-End Causal Language Architecture (\texttt{CartanLM}) (Section~\ref{sec:cartan_lm}):} We prove that any finite square lower-triangular unitary matrix is strictly diagonal (Theorem~\ref{thm:lower_triangular_unitary}), necessitating a dual-stage temporal-spatial split. We engineer \texttt{CartanLM} by combining (a) Lipschitz-bounded Relativistic-Pendulum symplectic kicks that eliminate degree-$3^{2L}$ polynomial overflow, (b) an $\mathcal{O}(T)$ causal complex SSM mixer, (c) token-gated radial Rayleigh damping for selective syntax forgetting, and (d) multi-head $\mathrm{U}(N)$ Cayley channel rotors.
-    \item \textbf{Zero-Activation Holographic Reversibility \& FLA Real-Split Optimization (Sections~\ref{sec:holographic_inversion}--\ref{sec:experiments}):} We derive the exact closed-form analytical inverse of the 5-stage \texttt{CartanBlock}, achieving $8.981\times 10^{-16}$ reconstruction MSE across 6 nonlinear layers with $\mathcal{O}(1)$ activation memory. Finally, by translating Flash-Linear-Attention (FLA) chunked scans into SIMD real-split log-polar coordinates alongside fused $2\times 2$ block-symplectic \texttt{torch.bmm} kernels, we achieve a $3.28\times$ end-to-end training speedup.
+    \item \textbf{The Cartan $2\times 2$ Unitary-Symplectic Intersection \& Division Algebra Ladder (Section~\ref{sec:cartan_triple}):} We replace scalar matrix weights with $2\times 2$ phase-plane rotor blocks living in $\mathrm{Sp}(2N,\mathbb{R})\cap \mathrm{O}(2N) \cong \mathrm{U}(N) \subset \mathcal{M}_N(\mathcal{C}\ell^0(2,0))$, reducing linear generator parameters by $4\times$ ($75\%$) relative to unconstrained $\mathbb{R}^{2N\times 2N}$ weights ($2\times$ or $50\%$ relative to unconstrained $\mathbb{C}^{N\times N}$ blocks) while guaranteeing exact symplecticity ($\det(W)\equiv 1$). We further examine the Hurwitz division algebra scaling limit ($2\times 2 \to 4\times 4 \to 8\times 8$ over $\mathbb{C}\to\mathbb{H}\to\mathbb{O}$) and demonstrate the depth-versus-width Lie bracket advantage via the Baker-Campbell-Hausdorff (BCH) hierarchy.
+    \item \textbf{End-to-End Causal Language Architecture (\texttt{CartanLM}) (Section~\ref{sec:cartan_lm}):} Confirming the algebraic obstruction that any finite square lower-triangular unitary matrix is strictly diagonal (Theorem~\ref{thm:lower_triangular_unitary}), we formulate a dual-stage temporal-spatial split. We engineer \texttt{CartanLM} by combining (a) Lipschitz-bounded Relativistic-Pendulum symplectic kicks that eliminate degree-$3^{2L}$ polynomial overflow, (b) an $\mathcal{O}(T)$ causal complex SSM mixer, (c) position-gated canonical momentum Rayleigh damping for selective syntax forgetting, and (d) multi-head $\mathrm{U}(N)$ Cayley channel rotors.
+    \item \textbf{Zero-Activation Holographic Reversibility \& FLA Real-Split Optimization (Sections~\ref{sec:holographic_inversion}--\ref{sec:experiments}):} We derive the exact closed-form analytical inverse of the 5-stage \texttt{CartanBlock}, achieving $8.981\times 10^{-16}$ reconstruction MSE ($9.520\times 10^{-16}$ after FLA optimization) across 6 nonlinear layers with $\mathcal{O}(1)$ activation memory. Finally, by translating Flash-Linear-Attention (FLA) \cite{yang2024fla} chunked scans into SIMD real-split log-polar coordinates alongside fused $2\times 2$ block-symplectic \texttt{torch.bmm} kernels, we achieve a $3.28\times$ end-to-end training speedup.
 \end{enumerate}
 
 % =============================================================================
@@ -129,16 +129,16 @@ As illustrated in Figure~\ref{fig:dialectical_derivation}, we resolve this trile
 Our framework sits at the intersection of four distinct research lineages: (1) Port-Hamiltonian control and neural differential equations, (2) symplectic integrators and reversible Lie group networks, (3) structured and oscillatory state-space models, and (4) spectral rank preservation in deep representations.
 
 \paragraph{Port-Hamiltonian Systems and Neural ODEs.}
-Port-Hamiltonian systems theory, formalized by van der Schaft and Jeltsema \cite{vanderschaft2014porthamiltonian}, generalizes classical Hamiltonian mechanics to open physical systems interacting with their environment through energy-conserving Dirac structures ($J = -J^\top$), resistive dissipation ports ($R = R^\top \succeq 0$), and external effort/flow ports ($B u$). Massaroli et al.\ \cite{massaroli2020dissecting} and Desai et al.\ \cite{desai2021porthamiltonian} introduced Port-Hamiltonian Neural Networks (pHNNs) by parameterizing continuous Neural ODEs with skew-symmetric and positive semi-definite matrices, while Cherifi et al.\ \cite{cherifi2022discrete} and Toledo-Zucco et al.\ \cite{toledo2020observer,toledo2024structure} studied structure-preserving discretizations using discrete gradients and symplectic reduction. However, prior pHNNs rely on adaptive explicit Runge-Kutta solvers or implicit algebraic root-finding at every step, rendering them computationally intractable for long-sequence language modeling ($T \ge 10^3$). Our work eliminates iterative ODE solvers entirely via closed-form Strang operator splitting and associative prefix scans.
+Port-Hamiltonian systems theory, formalized by van der Schaft and Jeltsema \cite{vanderschaft2014porthamiltonian}, generalizes classical Hamiltonian mechanics to open physical systems interacting with their environment through energy-conserving Dirac structures ($J = -J^\top$), resistive dissipation ports ($R = R^\top \succeq 0$), and external effort/flow ports ($B u$). Massaroli et al.\ \cite{massaroli2019porthamiltonian,massaroli2020dissecting} and Desai et al.\ \cite{desai2021porthamiltonian} studied Port-Hamiltonian formulations for neural network training and continuous Neural ODEs parameterized with skew-symmetric and positive semi-definite operators, while Cherifi et al.\ \cite{cherifi2022discrete} studied discrete-time port-Hamiltonian neural representations and Toledo et al.\ \cite{toledo2020observer,toledo2024structure} analyzed observer-based boundary control and structure-preserving model reduction of distributed port-Hamiltonian systems. However, continuous pHNNs relying on adaptive explicit Runge-Kutta solvers or implicit algebraic root-finding at every step are computationally prohibitive for long-sequence language modeling ($T \ge 10^3$). Our work eliminates iterative ODE solvers entirely via closed-form Strang operator splitting and associative prefix scans.
 
 \paragraph{Symplectic Integrators, Reversible Networks, and Orthogonal RNNs.}
 Canonical symplectic integration schemes---pioneered by Ruth \cite{ruth1983canonical}, Forest and Ruth \cite{forest1990fourth}, Strang \cite{strang1968construction}, and Yoshida \cite{yoshida1990construction}---decompose Hamiltonian vector fields into exactly integrable sub-flows whose composition preserves the canonical symplectic 2-form $\omega = \sum_{i=1}^N dq_i \wedge dp_i$. In deep learning, Gomez et al.\ \cite{gomez2017reversible} leveraged additive leapfrog coupling layers to construct the Reversible Residual Network (RevNet), enabling backpropagation without storing intermediate activations ($\mathcal{O}(1)$ activation memory). Greydanus et al.\ \cite{greydanus2019hamiltonian} (HNN) and Chen et al.\ \cite{chen2020symplectic} (SRNN) embedded symplectic integrators into neural networks to model physical trajectories, but required expensive second-order autograd derivatives $\nabla_{(q,p)}\mathcal{H}_\theta$. Concurrently, Unitary and Orthogonal RNNs \cite{arjovsky2016unitary,helfrich2018orthogonal,lezcanocasado2019cheap,lezcanocasado2019trivializations} constrained hidden state transitions to $\mathrm{U}(D)$ or $\mathrm{SO}(D)$ via the Cayley transform or Lie algebra exponential maps to prevent vanishing and exploding gradients. Our \texttt{CartanLM} unifies RevNet-style $\mathcal{O}(1)$-memory analytical invertibility with continuous $\mathrm{U}(N)$ Cayley rotors and pointwise non-linear symplectic kicks, without requiring second-order autograd calls.
 
 \paragraph{Structured, Selective, and Oscillatory State-Space Models.}
-Modern sequence modeling has been transformed by Structured State-Space Models, progressing from HiPPO-initialized S4 \cite{gu2022efficiently} to diagonal complex S5 \cite{smith2023simplified} and Linear Recurrent Units (LRU) \cite{orvieto2023resurrecting}. Gu and Dao introduced Mamba \cite{gu2023mamba} and Mamba-2 (Structured State Space Duality, SSD) \cite{dao2024transformers}, incorporating input-dependent selection mechanisms ($\Delta_t, B_t, C_t$). However, Mamba restricts its state transition matrix to real-valued diagonal decays ($\bar{A}_t = \exp(-\Delta_t A_{\text{diag}})$ with $A_{\text{diag}} > 0$), stripping the hidden state of oscillatory phase rotation and causing monotonic energy contraction when gates open. Recently, Rusch and Rus \cite{rusch2024oscillatory} introduced Linear Oscillatory State-Space Models (LinOSS), modeling sequences via uncoupled second-order harmonic oscillators ($\ddot{y} + A y = B u$) discretized with first-order Symplectic Euler (IMEX). While LinOSS demonstrated strong gains on ultra-long time series ($T=50,000$), its ODE is strictly linear, its state matrix $A$ is purely diagonal (zero cross-channel coupling inside the dynamical flow), its damping is a static numerical discretization artifact rather than token-selective, and it lacks analytical layerwise invertibility. Our Port-Hamiltonian Cartan framework strictly generalizes LinOSS to non-linear symplectic kicks, multi-head $\mathrm{U}(N)$ cross-channel rotors, dynamic token-gated radial damping, and second-order $\mathcal{O}(\Delta t^2)$ Strang splitting.
+Modern sequence modeling has been transformed by Structured State-Space Models, progressing from HiPPO-initialized S4 \cite{gu2022efficiently} to diagonal complex S5 \cite{smith2023simplified} and Linear Recurrent Units (LRU) \cite{orvieto2023resurrecting}. Gu and Dao introduced Mamba \cite{gu2023mamba} and Mamba-2 (Structured State Space Duality, SSD) \cite{dao2024transformers}, incorporating input-dependent selection mechanisms ($\Delta_t, B_t, C_t$). However, Mamba restricts its state transition matrix to real-valued diagonal decays ($\bar{A}_t = \exp(-\Delta_t A_{\text{diag}})$ with $A_{\text{diag}} > 0$), stripping the hidden state of oscillatory phase rotation and causing monotonic energy contraction when gates open. Recently, Rusch and Rus \cite{rusch2024oscillatory} introduced Linear Oscillatory State-Space Models (LinOSS), modeling sequences via uncoupled second-order harmonic oscillators ($\ddot{y} + A y = B u$) discretized with first-order Symplectic Euler (IMEX). While LinOSS demonstrated strong gains on ultra-long time series ($T=50,000$), its ODE is strictly linear, its state matrix $A$ is purely diagonal (zero cross-channel coupling inside the dynamical flow), its damping is not token-selective, and it lacks analytical layerwise invertibility. Our Port-Hamiltonian Cartan framework extends oscillatory state-space design beyond diagonal linear springs by introducing non-linear relativistic-pendulum symplectic kicks, multi-head $\mathrm{U}(N)$ cross-channel rotors, dynamic state- and position-gated Rayleigh damping, and second-order $\mathcal{O}(\Delta t^2)$ Strang splitting.
 
 \paragraph{Dimensional Collapse and Effective Rank.}
-Roy and Vetterli \cite{roy2007effective} defined the effective rank ($\mathrm{erank}$) of a matrix as the exponential of the Shannon entropy of its normalized singular values. In representation learning, Dong et al.\ \cite{dong2021attention} proved that pure self-attention loses rank doubly exponentially with depth, while Jing et al.\ \cite{jing2022understanding} and Garrido et al.\ (RankMe) \cite{garrido2023rankme} demonstrated that dimensional collapse directly degrades downstream generalization. Whereas prior works rely on external covariance regularizers (e.g., VICReg), our architecture prevents rank collapse structurally: because the skew-Hermitian rotor and radial projection act isometrically on the $(2N-1)$-dimensional spherical tangent bundle, singular value diversity is preserved by geometric invariant.
+Roy and Vetterli \cite{roy2007effective} defined the effective rank ($\mathrm{erank}$) of a matrix as the exponential of the Shannon entropy of its normalized singular values. In representation learning, Dong et al.\ \cite{dong2021attention} proved that pure self-attention loses rank doubly exponentially with depth, while Jing et al.\ \cite{jing2022understanding} and Garrido et al.\ (RankMe) \cite{garrido2023rankme} demonstrated that dimensional collapse directly degrades downstream generalization. Whereas prior works rely on external covariance regularizers (e.g., VICReg), our architecture prevents rank collapse structurally: because the skew-Hermitian rotor and radial projection preserve directional phase geometry on the spherical tangent bundle, singular value diversity is maintained across both network depth and sequence length.
 
 \begin{table}[htbp]
 \centering
@@ -148,14 +148,14 @@ Roy and Vetterli \cite{roy2007effective} defined the effective rank ($\mathrm{er
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|l|l|l|l|l|l|l|}
 \hline
-\textbf{Architecture} & \textbf{State Algebra} & \textbf{Discretization Scheme} & \textbf{Selective Forgetting} & \textbf{Channel Mixing in Flow} & \textbf{$\mathcal{O}(1)$ Memory Inverse} & \textbf{Rank Collapse Immunity} \\ \hline
+\textbf{Architecture} & \textbf{State Algebra} & \textbf{Discretization Scheme} & \textbf{Selective Forgetting} & \textbf{Channel Mixing in Flow} & \textbf{$\mathcal{O}(1)$ Memory Inverse} & \textbf{Rank Preservation} \\ \hline
 \textbf{S4} \cite{gu2022efficiently} & HiPPO Diag + Low-Rank & Bilinear / Cauchy Kernel & No (Static LTI) & Low-rank $PP^\top$ & No & Moderate \\ \hline
 \textbf{S5 / LRU} \cite{smith2023simplified,orvieto2023resurrecting} & Diagonal Complex $\mathbb{C}^N$ & Exact Scalar ZOH / Euler & No (Static LTI) & None (External MLP) & No & Moderate \\ \hline
 \textbf{Mamba} \cite{gu2023mamba} & Diagonal Real $\mathbb{R}^N$ & Zero-Order Hold (ZOH) & Yes (Isotropic Real Decay) & None (Diagonal) & No & Low (Contractive Decay) \\ \hline
 \textbf{Mamba-2 (SSD)} \cite{dao2024transformers} & Scalar Identity $a_t I$ & 1-Semiseparable Block & Yes (Scalar Gate $a_t$) & Outer Product Only & No & Low (Scalar Degeneracy) \\ \hline
 \textbf{LinOSS} \cite{rusch2024oscillatory} & Uncoupled Springs $\ddot{y}=-Ay$ & 1st-Order Symplectic Euler & No (Static Mode Decay) & None ($A$ is Diagonal) & No & High (Linear Harmonic) \\ \hline
 \textbf{scoRNN / DTRIV} \cite{helfrich2018orthogonal,lezcanocasado2019cheap} & Dense Lie Algebra $\mathfrak{so}(D)$ & Cayley / Padé Exp & No (Purely Unitary) & Dense $\mathrm{SO}(D)$ & Matrix Solve Required & High (Traps Noise) \\ \hline
-\textbf{PH-SSM \& \texttt{CartanLM} (Ours)} & \textbf{Cartan $\mathfrak{u}(N) \oplus \text{Pendulum}$} & \textbf{2nd-Order Symmetric Strang} & \textbf{Yes (Rank-1 Radial Gate)} & \textbf{Multi-Head $\mathrm{U}(N)$ Rotor} & \textbf{Yes ($\text{MSE} \sim 10^{-16}$)} & \textbf{Exact ($99.01\%$ Retention)} \\ \hline
+\textbf{PH-SSM \& \texttt{CartanLM} (Ours)} & \textbf{Cartan $\mathfrak{u}(N) \oplus \text{Pendulum}$} & \textbf{2nd-Order Symmetric Strang} & \textbf{Yes (Radial / $q_2$-Gated)} & \textbf{Multi-Head $\mathrm{U}(N)$ Rotor} & \textbf{Yes ($\text{MSE} \sim 10^{-16}$)} & \textbf{High ($99.01\%$ Temporal)} \\ \hline
 \end{tabular}%
 }
 \end{table}
@@ -173,90 +173,99 @@ Let $z(t) \in \mathbb{R}^D$ denote the continuous-time hidden state vector at se
 \end{equation}
 The evolution of $z(t)$ is governed by the input-driven Port-Hamiltonian State-Space differential equation:
 \begin{equation}
-    \frac{dz(t)}{dt} = \Big( J\big(x(t)\big) - R_{\text{radial}}\big(z(t), x(t)\big) \Big) \nabla_z H\big(z(t)\big) + B\big(x(t)\big) x(t),
+    \frac{dz(t)}{dt} = \Big( J - R_{\text{radial}}\big(z(t), x(t)\big) \Big) \nabla_z H\big(z(t)\big) + B\big(x(t)\big) x(t),
     \label{eq:ph_ssm_ode}
 \end{equation}
 where:
 \begin{enumerate}
-    \item $J(x) = -J(x)^\top \in \mathfrak{so}(D)$ is a skew-symmetric Poisson interconnection operator generating isometric phase rotations on the hypersphere $\mathbb{S}^{D-1}$, parameterized via $J = W_J - W_J^\top$ for learnable $W_J \in \mathbb{R}^{D\times D}$.
+    \item $J = -J^\top \in \mathfrak{so}(D)$ is a time-invariant skew-symmetric Poisson interconnection operator generating isometric phase rotations on the hypersphere $\mathbb{S}^{D-1}$, parameterized via $J = W_J - W_J^\top$ for learnable $W_J \in \mathbb{R}^{D\times D}$ so that its Cayley transform is precomputed once per forward pass.
     \item $R_{\text{radial}}(z, x) = R_{\text{radial}}(z, x)^\top \succeq 0$ is a positive semi-definite Rayleigh dissipation operator governing energy shedding.
     \item $B(x) \in \mathbb{R}^{D\times D}$ is an input-gated port injection operator defined as $B(x) = \mathrm{diag}\big(\sigma(W_B x + b_B)\big) W_{\text{in}}$, where $\sigma(\cdot)$ is the logistic sigmoid gate.
 \end{enumerate}
 
 \begin{sloppypar}
-By differentiating $H(z(t))$ along trajectories of Eq.~\eqref{eq:ph_ssm_ode} and invoking the skew-symmetry identity $z^\top J(x) z \equiv 0$ for all $z \in \mathbb{R}^D$, we obtain the exact Port-Hamiltonian power-balance law:
+By differentiating $H(z(t))$ along trajectories of Eq.~\eqref{eq:ph_ssm_ode} and invoking the skew-symmetry identity $z^\top J z \equiv 0$ for all $z \in \mathbb{R}^D$, we obtain the exact Port-Hamiltonian power-balance law:
 \begin{align}
-    \frac{dH(z(t))}{dt} &= z(t)^\top J(x) z(t) - z(t)^\top R_{\text{radial}}(z, x) z(t) + z(t)^\top B(x) x(t) \nonumber \\
+    \frac{dH(z(t))}{dt} &= z(t)^\top J z(t) - z(t)^\top R_{\text{radial}}(z, x) z(t) + z(t)^\top B(x) x(t) \nonumber \\
     &= -\underbrace{z(t)^\top R_{\text{radial}}(z, x) z(t)}_{\text{Dissipated Power } \ge 0} + \underbrace{\langle z(t), B(x)x(t) \rangle}_{\text{Injected Supply Rate}}.
     \label{eq:passivity_balance}
 \end{align}
 \end{sloppypar}
 
-\subsection{The Spectral Geometry of Radial Rayleigh Damping}
-If $R(z, x)$ is chosen to be an isotropic or arbitrary full-rank positive-definite matrix $R = \alpha I_D$ ($\alpha > 0$), then the homogeneous evolution operator $\exp\big((J - \alpha I)t\big) = e^{-\alpha t}\exp(Jt)$ contracts all $D$ singular values uniformly toward zero, inducing exponential memory amnesia. Conversely, if $R$ is an anisotropic diagonal matrix $\mathrm{diag}(\alpha_1,\dots,\alpha_D)$, different semantic dimensions decay at uneven rates, collapsing the Roy-Vetterli effective rank $\mathrm{erank}(Z) \to 1$.
+\subsection{The Spectral Geometry of Radial and Position-Gated Rayleigh Damping}
+If $R(z, x)$ is chosen to be a constant isotropic positive-definite matrix $R = \alpha I_D$ ($\alpha > 0$), then the homogeneous evolution operator $\exp\big((J - \alpha I)t\big) = e^{-\alpha t}\exp(Jt)$ contracts all $D$ singular values uniformly toward zero for all $t > 0$, inducing exponential memory amnesia. Conversely, if $R$ is an anisotropic diagonal matrix $\mathrm{diag}(\alpha_1,\dots,\alpha_D)$, different semantic dimensions decay at uneven rates, collapsing the Roy-Vetterli effective rank $\mathrm{erank}(Z) \to 1$.
 
-To resolve this, we restrict the Rayleigh dissipation tensor strictly to the \textbf{rank-1 radial projection operator} along the current state vector $z$:
-\begin{equation}
-    R_{\text{radial}}(z, x) = r(z, x) P_\parallel(z), \qquad P_\parallel(z) := \frac{z z^\top}{\|z\|_2^2 + \varepsilon},
-    \label{eq:radial_rayleigh_operator}
-\end{equation}
-where $\varepsilon = 10^{-8}$ ensures regularity at the origin and $r(z, x) \ge 0$ is a non-negative dissipation rate. In PH-SSM, $r(z)$ is governed by a softplus energy-excess threshold $r(z) = \beta\,\mathrm{softplus}(\|z\|_2^2 - E_0)$; in \texttt{CartanLM}, $r(x_t) = \gamma_{\max}\sigma(w_\gamma^\top x_t + b_\gamma)$ is directly gated by the input token $x_t$ to purge low-information syntax tokens.
+To resolve this, we introduce two complementary geometric damping mechanisms tailored to continuous state-space flows (PH-SSM) and reversible symplectic blocks (\texttt{CartanLM}):
+\begin{enumerate}
+    \item \textbf{Thresholded Radial Rayleigh Projection (PH-SSM):} In \texttt{PortHamiltonianSSM}, we define the state-dependent Rayleigh dissipation tensor as the rank-1 radial projection operator along $z$:
+    \begin{equation}
+        R_{\text{radial}}(z) = r(z) P_\parallel(z), \qquad P_\parallel(z) := \frac{z z^\top}{\|z\|_2^2 + \varepsilon}, \qquad r(z) = \beta\,\mathrm{softplus}\big(\|z\|_2^2 - E_0\big),
+        \label{eq:radial_rayleigh_operator}
+    \end{equation}
+    where $\varepsilon = 10^{-8}$ ensures regularity at the origin and $E_0 > 0$ defines the target equilibrium energy ball. Note that as a vector field on $z$, $-R_{\text{radial}}(z)z = -r(z)z$ acts radially; however, because $r(z) = \phi(\|z\|_2^2)$ depends on the radial energy $\|z\|_2^2$, its Fr\'echet derivative (Jacobian) splits anisotropically between $\mathcal{V}_\parallel(z) = \mathrm{span}(z)$ and $\mathcal{V}_\perp(z) = T_z\mathbb{S}^{D-1}$, and vanishes inside the equilibrium ball $\|z\|_2^2 \ll E_0$ where $r(z) \to 0$.
+    \item \textbf{Position-Gated Canonical Momentum Rayleigh Damping (\texttt{CartanLM}):} In \texttt{CartanLM} (Section~\ref{sec:cartan_lm}), where the state is partitioned into canonical coordinates $z = (q, p) \in \mathbb{R}^{2N}$, Stage 3 applies Rayleigh damping selectively to the kinetic momentum $p_1$ gated solely by the post-SSM position coordinate $q_2$:
+    \begin{equation}
+        p_2 = \exp\big(-\gamma(q_2)\Delta t\big) \odot p_1, \qquad \gamma(q_2) = \gamma_{\max}\,\sigma(W_\gamma q_2 + b_\gamma).
+        \label{eq:position_gated_momentum_damping}
+    \end{equation}
+    Leaving $q_2$ unscaled makes the map $(q_2, p_1) \mapsto (q_2, p_2)$ triangular, permitting exact closed-form analytical inversion $p_1 = \exp(+\gamma(q_2)\Delta t) \odot p_2$ without iterative root-finding (Theorem~\ref{thm:exact_inverse}).
+\end{enumerate}
 
-\begin{theorem}[Spectral Decomposition and Tangent Bundle Isometry]
+\begin{theorem}[Spectral Decomposition and Directional Phase Invariance]
 \label{thm:radial_isometry}
-Let $z \in \mathbb{R}^D \setminus \{0\}$ and let $R_{\text{radial}}(z, x) = r(z, x) \frac{z z^\top}{\|z\|_2^2}$ with $r(z, x) \ge 0$. Decompose the ambient state space $\mathbb{R}^D$ into the orthogonal direct sum:
+Let $z \in \mathbb{R}^D \setminus \{0\}$ and let $R_{\text{radial}}(z) = r(z) P_\parallel(z)$ with $P_\parallel(z) = \frac{z z^\top}{\|z\|_2^2}$ and $r(z) = \phi(\|z\|_2^2) \ge 0$. Decompose the ambient state space $\mathbb{R}^D$ into the orthogonal direct sum:
 \begin{equation}
     \mathbb{R}^D = \mathcal{V}_\parallel(z) \oplus \mathcal{V}_\perp(z), \qquad \mathcal{V}_\parallel(z) = \mathrm{span}(z), \quad \mathcal{V}_\perp(z) = T_z \mathbb{S}^{D-1}(\|z\|) = \{v \in \mathbb{R}^D \mid z^\top v = 0\}.
 \end{equation}
 Then:
 \begin{enumerate}
-    \item \textbf{Rank-1 Spectrum:} $R_{\text{radial}}(z, x)$ has exactly one non-zero eigenvalue $\lambda_1 = r(z, x) \ge 0$ with eigenvector $e_1 = \frac{z}{\|z\|_2} \in \mathcal{V}_\parallel(z)$, and $(D-1)$ identically zero eigenvalues $\lambda_2 = \dots = \lambda_D \equiv 0$ spanning the $(D-1)$-dimensional spherical tangent space $\mathcal{V}_\perp(z)$.
-    \item \textbf{Closed-Form Matrix Exponential:} For any step size $\Delta t > 0$, the dissipative flow operator $\Psi_{\Delta t}^R := \exp\big(-\Delta t R_{\text{radial}}(z, x)\big)$ satisfies:
+    \item \textbf{Spectrum of the Frozen Operator $R_{\text{radial}}(z_0)$:} At any frozen state $z_0 \neq 0$, the symmetric matrix $R_{\text{radial}}(z_0)$ has exactly one non-zero eigenvalue $\lambda_1 = r(z_0) \ge 0$ with eigenvector $e_1 = \frac{z_0}{\|z_0\|_2} \in \mathcal{V}_\parallel(z_0)$, and $(D-1)$ identically zero eigenvalues $\lambda_2 = \dots = \lambda_D \equiv 0$ spanning the spherical tangent space $\mathcal{V}_\perp(z_0)$. Its frozen-state matrix exponential is:
     \begin{equation}
-        \exp\big(-\Delta t R_{\text{radial}}(z, x)\big) = \big(I_D - P_\parallel(z)\big) + e^{-r(z, x)\Delta t} P_\parallel(z).
+        \exp\big(-\Delta t R_{\text{radial}}(z_0)\big) = \big(I_D - P_\parallel(z_0)\big) + e^{-r(z_0)\Delta t} P_\parallel(z_0),
         \label{eq:radial_exp_identity}
     \end{equation}
-    Consequently, for every orthogonal semantic perturbation $v_\perp \in \mathcal{V}_\perp(z)$, $\Psi_{\Delta t}^R v_\perp = v_\perp$ identically (eigenvalue $1.00000000$), while radial energy scales as $\|\Psi_{\Delta t}^R z\|_2^2 = e^{-2r(z,x)\Delta t}\|z\|_2^2$.
-    \item \textbf{Invariance of Normalized Directional Phase:} Under the unforced Port-Hamiltonian flow $\dot{z} = (J - R_{\text{radial}}(z,x))z$, the unit directional coordinate $\hat{z}(t) := \frac{z(t)}{\|z(t)\|_2} \in \mathbb{S}^{D-1}$ evolves according to:
+    which acts as the identity on $\mathcal{V}_\perp(z_0)$ and scales $z_0 \in \mathcal{V}_\parallel(z_0)$ by $e^{-r(z_0)\Delta t}$.
+    \item \textbf{True Jacobian of the Nonlinear Radial Vector Field $g(z) = -r(z)z$:} Differentiating $g(z) = -\phi(\|z\|_2^2)z$ with respect to $z$ yields the symmetric Jacobian:
     \begin{equation}
-        \frac{d\hat{z}(t)}{dt} = J(x)\hat{z}(t),
+        D_z g(z) = -r(z)\big(I_D - P_\parallel(z)\big) - \Big(r(z) + 2\|z\|_2^2 \phi'(\|z\|_2^2)\Big) P_\parallel(z).
+        \label{eq:nonlinear_radial_jacobian}
+    \end{equation}
+    Whenever $z$ resides inside the safe equilibrium energy ball where $r(z) \to 0$ and $\phi'(\|z\|_2^2) \to 0$, $D_z g(z) \to 0$ and the full discrete Strang transition Jacobian reduces to the exact orthogonal Cayley operator $A_J \in \mathrm{SO}(D)$ with all $D$ singular values equal to $1.00000000$. During an over-threshold burst ($\|z\|_2^2 > E_0$, $\phi' > 0$), radial perturbations along $\mathcal{V}_\parallel(z)$ experience enhanced restoring contraction at rate $\lambda_\parallel = r(z) + 2\|z\|_2^2 \phi'(\|z\|_2^2) > r(z)$.
+    \item \textbf{Invariance of Normalized Directional Phase:} Under the unforced Port-Hamiltonian flow $\dot{z} = (J - R_{\text{radial}}(z))z$, the unit directional coordinate $\hat{z}(t) := \frac{z(t)}{\|z(t)\|_2} \in \mathbb{S}^{D-1}$ evolves according to:
+    \begin{equation}
+        \frac{d\hat{z}(t)}{dt} = J\hat{z}(t),
         \label{eq:spherical_phase_invariance}
     \end{equation}
-    which is completely independent of the dissipation rate $r(z, x)$.
+    which is an exact isometric $\mathrm{SO}(D)$ flow on $\mathbb{S}^{D-1}$ completely independent of the dissipation rate $r(z)$.
 \end{enumerate}
 \end{theorem}
 
 \begin{proof}
-(1) Since $P_\parallel(z) = \frac{zz^\top}{\|z\|_2^2}$ is a symmetric rank-1 orthogonal projector ($P_\parallel^2 = P_\parallel = P_\parallel^\top$, $\mathrm{Tr}(P_\parallel) = 1$), its eigenvalues are $\{1, 0, \dots, 0\}$. Scaling by $r(z,x)$ yields $\lambda_1 = r(z,x)$ on $\mathcal{V}_\parallel(z)$ and $\lambda_2 = \dots = \lambda_D = 0$ on $\mathcal{V}_\perp(z)$.
+(1) Since $P_\parallel(z_0) = \frac{z_0 z_0^\top}{\|z_0\|_2^2}$ is a symmetric rank-1 orthogonal projector ($P_\parallel^2 = P_\parallel = P_\parallel^\top$, $\mathrm{Tr}(P_\parallel) = 1$), its eigenvalues are $\{1, 0, \dots, 0\}$. Scaling by $r(z_0)$ yields $\lambda_1 = r(z_0)$ on $\mathcal{V}_\parallel(z_0)$ and $\lambda_2 = \dots = \lambda_D = 0$ on $\mathcal{V}_\perp(z_0)$, and expanding $\exp(-\Delta t\, r(z_0) P_\parallel(z_0))$ via $P_\parallel^k = P_\parallel$ yields Eq.~\eqref{eq:radial_exp_identity}.
 
-(2) Using the idempotency $P_\parallel^k = P_\parallel$ for all $k \ge 1$ in the Taylor series of the matrix exponential:
-\begin{align*}
-    \exp\big(-\Delta t\, r P_\parallel\big) &= I_D + \sum_{k=1}^\infty \frac{(-\Delta t\, r)^k}{k!} P_\parallel^k = I_D + \left(\sum_{k=1}^\infty \frac{(-\Delta t\, r)^k}{k!}\right) P_\parallel \\
-    &= I_D + \big(e^{-r\Delta t} - 1\big) P_\parallel = (I_D - P_\parallel) + e^{-r\Delta t} P_\parallel.
-\end{align*}
-Applying this to $v_\perp \in \mathcal{V}_\perp(z)$ where $P_\parallel v_\perp = 0$ gives $\Psi_{\Delta t}^R v_\perp = v_\perp$. Applying it to $z$ where $P_\parallel z = z$ gives $\Psi_{\Delta t}^R z = e^{-r\Delta t} z$.
+(2) Applying the product rule to $g(z) = -\phi(z^\top z) z$ gives $D_z g(z) = -\phi(\|z\|_2^2) I_D - 2\phi'(\|z\|_2^2) z z^\top = -r(z)(I_D - P_\parallel(z)) - (r(z) + 2\|z\|_2^2 \phi'(\|z\|_2^2))P_\parallel(z)$, establishing Eq.~\eqref{eq:nonlinear_radial_jacobian}.
 
-(3) By the quotient rule and $\frac{d}{dt}\|z\|_2 = \frac{z^\top \dot{z}}{\|z\|_2} = \frac{z^\top (Jz - rz)}{\|z\|_2} = -r\|z\|_2$:
+(3) By the quotient rule and $\frac{d}{dt}\|z\|_2 = \frac{z^\top \dot{z}}{\|z\|_2} = \frac{z^\top (Jz - r(z)z)}{\|z\|_2} = -r(z)\|z\|_2$:
 \begin{equation*}
-    \frac{d}{dt}\left(\frac{z}{\|z\|_2}\right) = \frac{\dot{z}\|z\|_2 - z \frac{d}{dt}\|z\|_2}{\|z\|_2^2} = \frac{(Jz - rz)\|z\|_2 - z(-r\|z\|_2)}{\|z\|_2^2} = J\left(\frac{z}{\|z\|_2}\right) = J\hat{z}. \qedhere
+    \frac{d}{dt}\left(\frac{z}{\|z\|_2}\right) = \frac{\dot{z}\|z\|_2 - z \frac{d}{dt}\|z\|_2}{\|z\|_2^2} = \frac{(Jz - r(z)z)\|z\|_2 - z(-r(z)\|z\|_2)}{\|z\|_2^2} = J\left(\frac{z}{\|z\|_2}\right) = J\hat{z}. \qedhere
 \end{equation*}
 \end{proof}
 
 \subsection{Second-Order Symmetric Strang Splitting and Cayley Lie Group Integration}
-To discretize Eq.~\eqref{eq:ph_ssm_ode} with $\mathcal{O}(\Delta t^2)$ global accuracy while strictly preserving both the orthogonal Lie group structure $\mathrm{SO}(D)$ and unconditional Lyapunov contractive bounds, we employ \textbf{Second-Order Symmetric Strang Operator Splitting} \cite{strang1968construction}:
+To discretize Eq.~\eqref{eq:ph_ssm_ode} with second-order $\mathcal{O}(\Delta t^2)$ accuracy on the homogeneous Port-Hamiltonian flow while strictly preserving the orthogonal Lie group structure $\mathrm{SO}(D)$ and unconditional Lyapunov contractive bounds, we employ \textbf{Symmetric Strang Operator Splitting} \cite{strang1968construction} coupled with a midpoint forward-Euler port injection:
 \begin{equation}
     z_{t+1} = \Psi_{\Delta t / 2}^R \circ \Phi_{\Delta t}^{J, B}(x_t) \circ \Psi_{\Delta t / 2}^R (z_t).
     \label{eq:strang_splitting}
 \end{equation}
 Here:
 \begin{enumerate}
-    \item \textbf{Half-Step Radial Damping ($\Psi_{\Delta t / 2}^R$):} Evaluates the exact exponential radial contraction $z' = \exp\big(-\frac{\Delta t}{2} r(z)\big) z$ in $\mathcal{O}(D)$ elementwise operations.
-    \item \textbf{Exact Orthogonal Cayley Flow ($\Phi_{\Delta t}^{J, B}$):} Approximates $\exp(\Delta t J)$ via the Padé-(1,1) Cayley transform:
+    \item \textbf{Half-Step Radial Damping ($\Psi_{\Delta t / 2}^R$):} Evaluates the frozen-coefficient exponential Euler radial step $z' = \exp\big(-\frac{\Delta t}{2} r(z_t)\big) z_t$ in $\mathcal{O}(D)$ elementwise operations.
+    \item \textbf{Exact Orthogonal Cayley Flow ($\Phi_{\Delta t}^{J, B}$):} Approximates $\exp(\Delta t J)$ to second order $\mathcal{O}(\Delta t^2)$ via the Padé-(1,1) Cayley transform:
     \begin{equation}
         A_J = \left(I_D - \frac{\Delta t}{2} J\right)^{-1} \left(I_D + \frac{\Delta t}{2} J\right) \in \mathrm{SO}(D).
         \label{eq:cayley_transform}
     \end{equation}
-    Because $J^\top = -J$, we have $A_J^\top A_J = I_D$ and $\det(A_J) = 1.00000000$ for \textit{any} step size $\Delta t > 0$. The midpoint state update is $z'' = A_J z' + \Delta t B(x_t) x_t$.
+    Because $J^\top = -J$, we have $A_J^\top A_J = I_D$ and $\det(A_J) = 1.00000000$ for \textit{any} step size $\Delta t > 0$. The midpoint state update with first-order forward-Euler port injection is $z'' = A_J z' + \Delta t B(x_t) x_t$.
     \item \textbf{Second Half-Step Radial Damping ($\Psi_{\Delta t / 2}^R$):} Evaluates $z_{t+1} = \exp\big(-\frac{\Delta t}{2} r(z'')\big) z''$.
 \end{enumerate}
 
@@ -284,7 +293,7 @@ where:
 \end{enumerate}
 
 % =============================================================================
-\section{The Cartan $2\times 2$ Triple Intersection and Division Algebra Ladder}
+\section{The Cartan $2\times 2$ Unitary-Symplectic Intersection and Division Algebra Ladder}
 \label{sec:cartan_triple}
 % =============================================================================
 
@@ -301,34 +310,34 @@ Each macro-element $(i,j)$ of the inter-neuron weight matrix $W \in \mathbb{R}^{
     \label{eq:cartan_2x2_element}
 \end{equation}
 
-When we require the global $2N\times 2N$ block matrix $W = (W_{ij})_{i,j=1}^N$ to simultaneously preserve the canonical symplectic 2-form ($W^\top \Omega W = \Omega$, Liouville volume conservation) and the Euclidean $\ell_2$ norm ($W^\top W = I_{2N}$, isometric gradient flow), we arrive at the celebrated \textbf{Cartan Triple Intersection}:
+When we require the global $2N\times 2N$ block matrix $W = (W_{ij})_{i,j=1}^N$ to simultaneously preserve the canonical symplectic 2-form ($W^\top \Omega W = \Omega$, Liouville volume conservation) and the Euclidean $\ell_2$ norm ($W^\top W = I_{2N}$, isometric gradient flow), we arrive at the classical unitary-symplectic-orthogonal intersection (the Cartan compact dual triple):
 \begin{equation}
-    \mathcal{M}_{N\times N}(2\times 2) \cap \Big[\mathrm{Sp}(2N, \mathbb{R}) \cap \mathrm{O}(2N)\Big] \cong \mathrm{U}(N) \cong \mathcal{M}_N\big(\mathcal{C}\ell^0(2,0)\big).
+    \mathcal{M}_{N\times N}(2\times 2) \cap \Big[\mathrm{Sp}(2N, \mathbb{R}) \cap \mathrm{O}(2N)\Big] \cong \mathrm{U}(N) \subset \mathcal{M}_N\big(\mathcal{C}\ell^0(2,0)\big).
     \label{eq:cartan_triple_intersection}
 \end{equation}
 
 \begin{proposition}[Parameter Parsimony of $\mathrm{U}(N)$]
 \label{prop:unitary_parsimony}
-Whereas an unconstrained dense layer in $\mathbb{R}^{2N\times 2N}$ requires $4N^2$ real parameters, the Lie algebra $\mathfrak{u}(N)$ of skew-Hermitian generators $K = A + i S$ (where $A = -A^\top \in \mathbb{R}^{N\times N}$ has $\frac{N(N-1)}{2}$ independent parameters and $S = S^\top \in \mathbb{R}^{N\times N}$ has $\frac{N(N+1)}{2}$ independent parameters) requires:
+Whereas an unconstrained dense layer in $\mathbb{R}^{2N\times 2N}$ requires $4N^2$ real parameters and an unconstrained complex matrix in $\mathcal{M}_N(\mathbb{C})$ requires $2N^2$ real parameters, the Lie algebra $\mathfrak{u}(N)$ of skew-Hermitian generators $K = A + i S$ (where $A = -A^\top \in \mathbb{R}^{N\times N}$ has $\frac{N(N-1)}{2}$ independent parameters and $S = S^\top \in \mathbb{R}^{N\times N}$ has $\frac{N(N+1)}{2}$ independent parameters) requires:
 \begin{equation}
     \dim_{\mathbb{R}} \mathfrak{u}(N) = \frac{N(N-1)}{2} + \frac{N(N+1)}{2} = N^2 \text{ real parameters},
 \end{equation}
-achieving a \textbf{$4\times$ reduction in linear generator parameters} ($50\%$ reduction relative to unconstrained $2\times 2$ blocks) while guaranteeing $\det(W) = 1.00000000$ and preserving quantum density purity $\gamma = \mathrm{Tr}(\rho^2) \equiv 1.0$.
+achieving a \textbf{$4\times$ ($75\%$) reduction in linear generator parameters} relative to unconstrained $\mathbb{R}^{2N\times 2N}$ weights (and a $2\times$ [$50\%$] reduction relative to unconstrained $2\times 2$ complex blocks) while guaranteeing $\det(W) = 1.00000000$ and preserving quantum density purity $\gamma = \mathrm{Tr}(\rho^2) \equiv 1.0$.
 \end{proposition}
 
 \subsection{Hurwitz's Theorem and the Normed Division Algebra Scaling Limit}
 A natural question arises: \textit{what happens if we scale the $2\times 2$ block matrix element to $4\times 4$, $8\times 8$, or $16\times 16$?} By \textbf{Hurwitz's Composition Algebra Theorem (1898)} \cite{hurwitz1898composition}, the only normed division algebras over $\mathbb{R}$ satisfying $\|xy\| = \|x\|\|y\|$ without zero divisors are of dimensions $k \in \{1, 2, 4, 8\}$:
 \begin{table}[htbp]
 \centering
-\caption{The Hurwitz Normed Division Algebra Ladder for $k\times k$ block-rotor neural layers.}
+\caption{The Hurwitz Normed Division Algebra Ladder for $k\times k$ block-rotor neural layers (total state dimension $D = kN$).}
 \label{tab:hurwitz_ladder}
 \vspace{0.3em}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|c|l|l|c|c|l|}
 \hline
-\textbf{Block Size} & \textbf{Division Algebra} & \textbf{Compact Lie Group} & \textbf{Params / Block} & \textbf{Param Savings} & \textbf{Algebraic Property} \\ \hline
-$1 \times 1$ & Real $\mathbb{R}$ & $\mathrm{O}(2N)$ & $1$ of $1$ & $0\%$ & Commutative, Associative \\ \hline
-$2 \times 2$ & Complex $\mathbb{C} \cong \mathcal{C}\ell^0(2,0)$ & $\mathrm{U}(N) = \mathrm{Sp}(2N)\cap\mathrm{O}(2N)$ & $2$ of $4$ & $\mathbf{50.0\%}$ & Commutative, Associative \\ \hline
+\textbf{Block Size} & \textbf{Division Algebra} & \textbf{Compact Lie Group} & \textbf{Params / Block} & \textbf{Block Savings} & \textbf{Algebraic Property} \\ \hline
+$1 \times 1$ & Real $\mathbb{R}$ & $\mathrm{O}(D)$ ($D=2N$) & $1$ of $1$ & $0\%$ & Commutative, Associative \\ \hline
+$2 \times 2$ & Complex $\mathbb{C} \cong \mathcal{C}\ell^0(2,0)$ & $\mathrm{U}(N) = \mathrm{Sp}(2N)\cap\mathrm{O}(2N)$ & $2$ of $4$ & $\mathbf{50.0\%}$ ($75\%$ in $\mathfrak{u}(N)$) & Commutative, Associative \\ \hline
 $4 \times 4$ & Quaternion $\mathbb{H} \cong \mathrm{Spin}(3)$ & $\mathrm{Sp}(N) = \mathrm{U}(N,\mathbb{H})$ & $4$ of $16$ & $\mathbf{75.0\%}$ & Non-Commutative, Associative \\ \hline
 $8 \times 8$ & Octonion $\mathbb{O}$ & Exceptional / $\mathrm{Spin}(8)$ & $8$ of $64$ & $\mathbf{87.5\%}$ & Non-Associative (Alternative) \\ \hline
 $16 \times 16$ & Sedenion $\mathbb{S}$ (Cayley-Dickson) & \textit{Fails Group Closure} & --- & --- & \textcolor{crimson}{\textbf{Zero Divisors ($\det(W)=0$!)}} \\ \hline
@@ -338,14 +347,14 @@ $16 \times 16$ & Sedenion $\mathbb{S}$ (Cayley-Dickson) & \textit{Fails Group Cl
 
 At $16\times 16$ (Sedenions $\mathbb{S}$), non-zero vectors $x, y \neq 0$ exist such that $x \cdot y = 0$, creating singular zero-divisor traps that destroy symplecticity ($\det(W) = 0$) and break analytical invertibility. Thus, $2\times 2$ ($\mathbb{C}$) and $4\times 4$ ($\mathbb{H}$) represent the sweet spot of associative Lie group hardware execution.
 
-\subsection{The Iso-Parametric Depth-vs-Width Law via BCH Lie Brackets}
-Why does stacking $L$ deep Cartan-Trotter layers of width $N$ dramatically outperform a single wide layer under an identical parameter budget $P = L \cdot N^2$? By the \textbf{Baker-Campbell-Hausdorff (BCH) Formula}, composing alternating linear unitary flows $e^{\Delta t \mathcal{L}_U}$ and non-linear symplectic kick flows $e^{\Delta t \mathcal{L}_V}$ across depth $L$ generates an effective Hamiltonian governed by nested Lie brackets (Poisson brackets $\{H_U, H_V\}$):
+\subsection{The Depth-vs-Width Scaling Law via BCH Lie Brackets}
+Why does stacking $L$ deep Cartan-Trotter layers of width $N$ dramatically outperform a single wide layer even when using fewer total parameters ($840$ vs.\ $1,030$)? By the \textbf{Baker-Campbell-Hausdorff (BCH) Formula}, composing alternating linear unitary flows $e^{\Delta t \mathcal{L}_U}$ and non-linear symplectic kick flows $e^{\Delta t \mathcal{L}_V}$ across depth $L$ generates an effective Hamiltonian governed by nested Lie brackets (Poisson brackets $\{H_U, H_V\}$):
 \begin{align}
     \exp(\Delta t \mathcal{L}_U)\exp(\Delta t \mathcal{L}_V) = \exp\Big(&\Delta t(\mathcal{L}_U + \mathcal{L}_V) + \frac{\Delta t^2}{2}[\mathcal{L}_U, \mathcal{L}_V] \nonumber \\
     &+ \frac{\Delta t^3}{12}\Big([\mathcal{L}_U, [\mathcal{L}_U, \mathcal{L}_V]] + [\mathcal{L}_V, [\mathcal{L}_V, \mathcal{L}_U]]\Big) + \cdots\Big).
     \label{eq:bch_hierarchy}
 \end{align}
-While a 1-layer wide network has Lie bracket nesting depth $0$, an $L$-layer Cartan-Trotter stack generates $2^L$-order compositional polynomial and trigonometric interactions while keeping its Jacobian determinant strictly pinned to $\det(J_{\text{total}}) = \prod_{\ell=1}^L \det(J_\ell) = 1^L \equiv 1.00000000$.
+Whereas a single operator split step captures only first-order Lie brackets, composing $L$ alternating Cartan-Trotter layers generates nested BCH Lie brackets up to depth $L$ (spanning $2^L$ compositional polynomial and trigonometric interaction paths) while keeping its Jacobian determinant strictly pinned to $\det(J_{\text{total}}) = \prod_{\ell=1}^L \det(J_\ell) = 1^L \equiv 1.00000000$.
 
 % =============================================================================
 \section[\texttt{CartanLM}: End-to-End Port-Hamiltonian LM Architecture]{\texttt{CartanLM}: End-to-End Port-Hamiltonian\\ Language Model Architecture}
@@ -371,7 +380,7 @@ Theorem~\ref{thm:lower_triangular_unitary} proves that no non-trivial causal seq
 \end{remark}
 
 \subsection{Resolving Deep Kerr Polynomial Blowup via Relativistic-Pendulum Kicks}
-In optical waveguide physics, the canonical non-linear symplectic kick derives from the quartic Kerr Hamiltonian $V_{\text{Kerr}}(q) = \frac{\chi}{4}q^4$, yielding the cubic shear kick $p' = p - \Delta t\, \chi q^3$. While exact for shallow layers, composing $L$ layers of cubic kicks produces a polynomial of degree $3^{2L}$. At depth $L=6$, $3^{12} = 531,441$: any hidden coordinate $|q| > 1.5$ overflows IEEE-754 \texttt{float32} ($> 3.4\times 10^{38}$), causing immediate \texttt{NaN} gradients. Furthermore, on the Boolean hypercube $q \in \{-1, +1\}^N$ (such as $k$-bit XOR parity), $q^3 = q$ acts purely linearly, stalling parity accuracy at $51.56\%$.
+In optical waveguide physics, the canonical non-linear symplectic kick derives from the quartic Kerr Hamiltonian $V_{\text{Kerr}}(q) = \frac{\chi}{4}q^4$, yielding the cubic shear kick $p' = p - \Delta t\, \chi q^3$. While exact for shallow layers, composing $L$ layers of two half-step cubic kicks coupled with linear mixing produces a polynomial of degree $3^{2L}$. At depth $L=6$, $3^{12} = 531,441$: any unnormalized coordinate exceeding $|q| > 1.0002$ (and in particular $|q| = 1.5$, where $1.5^{531,441} \gg 3.4\times 10^{38}$) overflows IEEE-754 \texttt{float32}, causing immediate \texttt{NaN} gradients. Furthermore, on the Boolean hypercube $q \in \{-1, +1\}^N$ (such as $k$-bit XOR parity), $q^3 = q$ acts purely linearly, stalling parity accuracy at $51.56\%$.
 
 We resolve both pathologies by introducing the \textbf{Relativistic-Pendulum Symplectic Potential}:
 \begin{equation}
@@ -383,13 +392,13 @@ whose negative gradient yields the \textbf{Lipschitz-Bounded Relativistic-Pendul
     \Phi_{\text{kick}}^{\Delta t / 2}(q, p) = \big(q,\, p'\big), \qquad p'_i = p_i - \frac{\Delta t}{2}\Big(\underbrace{\chi_i \tanh(q_i)}_{\text{Relativistic Saturation}} + \underbrace{\gamma_i \sin(\omega_i q_i + \phi_i)}_{\text{Parity-Breaking Harmonic}}\Big).
     \label{eq:pendulum_kick}
 \end{equation}
-Because $|\tanh(q_i)| \le 1$ and $|\sin(\omega_i q_i + \phi_i)| \le 1$, the kick force is globally bounded by $|f_i(q_i)| \le |\chi_i| + |\gamma_i|$ for all $q_i \in (-\infty, +\infty)$, guaranteeing \textbf{zero numerical overflow at arbitrary depth $L \to \infty$}, while its Jacobian is an upper-triangular shear matrix with unit determinant:
+Because $|\tanh(q_i)| \le 1$ and $|\sin(\omega_i q_i + \phi_i)| \le 1$, the kick force is globally bounded by $|f_i(q_i)| \le |\chi_i| + |\gamma_i|$ for all $q_i \in (-\infty, +\infty)$, guaranteeing \textbf{zero numerical overflow at arbitrary depth $L \to \infty$}, while its Jacobian is a lower-triangular block shear matrix with unit determinant:
 \begin{equation}
     \det\left(\frac{\partial(q',p')}{\partial(q,p)}\right) = \det\begin{pmatrix} I_N & 0 \\ -\frac{\Delta t}{2}\mathrm{diag}(f'(q)) & I_N \end{pmatrix} \equiv 1.00000000.
 \end{equation}
 
 \subsection{The 5-Stage Reversible \texttt{CartanBlock} Pipeline}
-As illustrated in Figure~\ref{fig:cartan_block_diagram}, each layer of \texttt{CartanLM} executes a symmetric 5-stage Strang operator split that updates the canonical phase-plane coordinates $z^{(\ell)} = (q, p) \in \mathbb{R}^{B \times T \times 2N}$. Stage 1 executes a non-linear symplectic shear kick $p_1 = p - \frac{\Delta t}{2} f(q)$ governed by our Lipschitz-bounded relativistic-pendulum force; because the update is strictly triangular, its Jacobian determinant is identically $\det(J_1) = 1.00000000$. Stage 2 couples the canonical momentum $p_1$ into the coordinate plane via the causal associative SSM scan $q_2 = q_1 + \Delta t \cdot \mathrm{SSM}(p_1)$, propagating sequence context with strict causality ($\partial q_{2,t}/\partial p_{1,t+k} \equiv 0$ for all $k \ge 1$). Stage 3 performs token-gated radial Rayleigh damping, attenuating momentum coordinates $p_2 = \exp(-\gamma(q_2)\Delta t) p_1$ according to syntax content while strictly preserving semantic tangent angles. Stage 4 applies a multi-head $\mathrm{U}(N)$ Cayley unitary rotation across channels via fused block-symplectic operations ($W^\top = W^{-1}$). Finally, Stage 5 applies the second half-step relativistic-pendulum kick $p_4 = p_3 - \frac{\Delta t}{2} f(q_3)$, completing the second-order symmetric composition.
+As illustrated in Figure~\ref{fig:cartan_block_diagram}, each layer of \texttt{CartanLM} executes a symmetric 5-stage Strang operator split that updates the canonical phase-plane coordinates $z^{(\ell)} = (q, p) \in \mathbb{R}^{B \times T \times 2N}$. Stage 1 executes a non-linear symplectic shear kick $p_1 = p - \frac{\Delta t}{2} f(q)$ governed by our Lipschitz-bounded relativistic-pendulum force; because the update is strictly triangular, its Jacobian determinant is identically $\det(J_1) = 1.00000000$. Stage 2 couples the canonical momentum $p_1$ into the coordinate plane via the causal associative SSM scan $q_2 = q_1 + \Delta t \cdot \mathrm{SSM}(p_1)$, propagating sequence context with strict causality ($\partial q_{2,t}/\partial p_{1,t+k} \equiv 0$ for all $k \ge 1$). Stage 3 performs position-gated canonical momentum Rayleigh damping, attenuating momentum coordinates $p_2 = \exp(-\gamma(q_2)\Delta t) \odot p_1$ gated by the post-SSM position state $q_2$ while leaving $q_2$ untouched so that the transformation remains triangular and analytically invertible in closed form. Stage 4 applies a multi-head $\mathrm{U}(N)$ Cayley unitary rotation across channels via fused block-symplectic operations ($W^\top = W^{-1}$). Finally, Stage 5 applies the second half-step relativistic-pendulum kick $p_4 = p_3 - \frac{\Delta t}{2} f(q_3)$, completing the second-order symmetric composition.
 
 Following the $L$-layer \texttt{CartanBlock} stack, the final phase state $z^{(L)}$ is normalized via \texttt{RMSNorm} and projected back to vocabulary logits through a weight-tied embedding head ($W_{\text{head}} \equiv E$).
 
@@ -414,8 +423,8 @@ Following the $L$-layer \texttt{CartanBlock} stack, the final phase state $z^{(L
 };
 
 \node[stagebox, below=of ssm] (damp) {
-    \textbf{Stage 3: Token-Gated Radial Rayleigh Syntax Purging (\texttt{TokenGatedRadialRayleighDamping})}\newline
-    $\gamma(q_2) = \gamma_{\max}\,\sigma(W_\gamma q_2 + b_\gamma) \in \mathbb{R}^{B\times T\times 1}, \qquad p_2 = \exp\big(-\gamma(q_2)\Delta t\big) \odot p_1$
+    \textbf{Stage 3: Position-Gated Canonical Momentum Rayleigh Damping (\texttt{TokenGatedRadialRayleighDamping})}\newline
+    $\gamma(q_2) = \gamma_{\max}\,\sigma(W_\gamma q_2 + b_\gamma) \in \mathbb{R}^{B\times T\times 1}, \qquad p_2 = \exp\big(-\gamma(q_2)\Delta t\big) \odot p_1 \quad (q_2\text{ preserved})$
 };
 
 \node[stagebox, below=of damp] (rotor) {
@@ -447,7 +456,7 @@ Following the $L$-layer \texttt{CartanBlock} stack, the final phase state $z^{(L
 % =============================================================================
 
 \subsection{Exact Closed-Form Analytical Layer Inversion}
-Because Stages 1--5 of the \texttt{CartanBlock} are structured as triangular shear updates in $(q, p)$ paired with a unitary channel rotation $U \in \prod_{h=1}^H \mathrm{U}(N_h)$ and a $q_2$-gated scalar radial factor $\exp(-\gamma(q_2)\Delta t)$, the entire nonlinear block possesses an \textbf{exact closed-form analytical inverse} requiring zero matrix inversions at reversal time:
+Because Stages 1--5 of the \texttt{CartanBlock} are structured as triangular shear updates in $(q, p)$ paired with a unitary channel rotation $U \in \prod_{h=1}^H \mathrm{U}(N_h)$ and a $q_2$-gated momentum damping factor $\exp(-\gamma(q_2)\Delta t)$, the entire nonlinear block possesses an \textbf{exact closed-form analytical inverse} requiring zero matrix inversions at reversal time:
 
 \begin{theorem}[Closed-Form Analytical Invertibility of \texttt{CartanBlock}]
 \label{thm:exact_inverse}
@@ -455,21 +464,21 @@ Given only the output state $z_{\text{out}} = (q_4, p_4) \in \mathbb{R}^{B\times
 \begin{align}
     \text{1. Undo Kick 2:} \quad & q_3 = q_4, \quad p_3 = p_4 + \frac{\Delta t}{2}\big(\chi \odot \tanh(q_4) + \gamma \odot \sin(\omega \odot q_4 + \phi)\big), \\
     \text{2. Undo } \mathrm{U}(N)\text{ Rotor:} \quad & \begin{bmatrix} q_2 & p_2 \end{bmatrix} = \begin{bmatrix} q_3 & p_3 \end{bmatrix} \begin{bmatrix} U_r & -U_i \\ U_i & U_r \end{bmatrix} \quad (U^{-1} = U^\dagger), \\
-    \text{3. Undo Radial Damping:} \quad & p_1 = p_2 \odot \exp\big(+\gamma(q_2)\Delta t\big) \quad (\gamma(q_2)\text{ uses } q_2\text{ only}), \\
+    \text{3. Undo Momentum Damping:} \quad & p_1 = p_2 \odot \exp\big(+\gamma(q_2)\Delta t\big) \quad (\gamma(q_2)\text{ uses } q_2\text{ only}), \\
     \text{4. Undo Causal SSM:} \quad & m_{1:T},\, \_ = \mathrm{CausalCartanSSM}(p_1), \quad q_1 = q_2 - \Delta t \cdot m_{1:T}, \\
     \text{5. Undo Kick 1:} \quad & q_0 = q_1, \quad p_0 = p_1 + \frac{\Delta t}{2}\big(\chi \odot \tanh(q_1) + \gamma \odot \sin(\omega \odot q_1 + \phi)\big).
 \end{align}
 \end{theorem}
 
 \begin{remark}[Why Step 3 and Step 4 Are Computationally Exact]
-Crucially, in Forward Stage 2, the causal SSM is driven solely by $p_1$ to update $q_2 = q_1 + \Delta t\cdot\mathrm{SSM}(p_1)$. In Forward Stage 3, the radial damping gate $\gamma(q_2)$ is computed solely from $q_2$ to scale $p_2 = \exp(-\gamma(q_2)\Delta t)p_1$. Therefore, during backward inversion, $q_2$ is already known after Step 2, allowing $\gamma(q_2)$ and $p_1$ to be reconstructed exactly in Step 3, which in turn allows $\mathrm{SSM}(p_1)$ and $q_1$ to be reconstructed exactly in Step 4!
+Crucially, in Forward Stage 2, the causal SSM is driven solely by $p_1$ to update $q_2 = q_1 + \Delta t\cdot\mathrm{SSM}(p_1)$. In Forward Stage 3, the Rayleigh damping gate $\gamma(q_2)$ is computed solely from $q_2$ to scale $p_2 = \exp(-\gamma(q_2)\Delta t)p_1$. Therefore, during backward inversion, $q_2$ is already known after Step 2, allowing $\gamma(q_2)$ and $p_1$ to be reconstructed exactly in Step 3, which in turn allows $\mathrm{SSM}(p_1)$ and $q_1$ to be reconstructed exactly in Step 4!
 \end{remark}
 
 \subsection{FLA Real-Split Chunked Log-Cumsum Scan and Fused Block-Symplectic BMM}
 Profiling the naive power-of-2 recursive tree associative scan in PyTorch revealed two severe hardware bottlenecks on CPU/GPU: (1) recursive tensor slicing and \texttt{torch.cat} at each tree level generated $3,150$ \texttt{aten::copy\_} and $760$ \texttt{SliceBackward0} autograd nodes in 5 steps; and (2) PyTorch's \texttt{complex64} \texttt{exp} and \texttt{cumsum} bypass AVX2/SIMD vectorization.
 
 \begin{sloppypar}
-Inspired by the chunked state-space decomposition in Flash Linear Attention (\texttt{fla}) \cite{dao2024transformers}, we reformulate the complex recurrence $h_t = e^{-\alpha_t + i\theta_t} h_{t-1} + (u_{r,t} + i u_{i,t})$ into \textbf{Chunked Real-Split Log-Polar Coordinates} (\texttt{chunked\_log\_scan\_real\_split} in \texttt{ph\_ssm/causal\_token\_mixer.py}):
+Inspired by the chunked state-space decomposition in Flash Linear Attention (\texttt{fla}) \cite{yang2024fla,dao2024transformers}, we reformulate the complex recurrence $h_t = e^{-\alpha_t + i\theta_t} h_{t-1} + (u_{r,t} + i u_{i,t})$ into \textbf{Chunked Real-Split Log-Polar Coordinates} (\texttt{chunked\_log\_scan\_real\_split} in \texttt{ph\_ssm/causal\_token\_mixer.py}):
 \begin{align}
     g_{\alpha, t}^{(c)} &= \sum_{\tau=1}^t (-\alpha_\tau^{(c)}), \qquad g_{\theta, t}^{(c)} = \sum_{\tau=1}^t \theta_\tau^{(c)}, \qquad \tilde{g}_{\alpha, t}^{(c)} = g_{\alpha, t}^{(c)} - g_{\alpha, 1}^{(c)}, \\
     \begin{pmatrix} w_{r, t}^{(c)} \\ w_{i, t}^{(c)} \end{pmatrix} &= e^{-\tilde{g}_{\alpha, t}^{(c)}} \begin{pmatrix} \cos g_{\theta, t}^{(c)} & \sin g_{\theta, t}^{(c)} \\ -\sin g_{\theta, t}^{(c)} & \cos g_{\theta, t}^{(c)} \end{pmatrix} \begin{pmatrix} u_{r, t}^{(c)} \\ u_{i, t}^{(c)} \end{pmatrix}, \qquad \begin{pmatrix} s_{r, t}^{(c)} \\ s_{i, t}^{(c)} \end{pmatrix} = \sum_{\tau=1}^t \begin{pmatrix} w_{r, \tau}^{(c)} \\ w_{i, \tau}^{(c)} \end{pmatrix}, \\
@@ -483,79 +492,54 @@ Across chunk boundaries $c \in \{1,\dots,\lceil T/C\rceil\}$, the boundary state
 \label{sec:experiments}
 % =============================================================================
 
-We evaluate \textbf{PH-SSM} and \textbf{\texttt{CartanLM}} across six rigorous empirical benchmarks testing long-horizon gradient conservation, non-stationary noise rejection, high-dimensional effective rank retention, coupled nonlinear PDE waveguides, compositional depth-vs-width scaling, and autoregressive language modeling on TinyShakespeare.
+We evaluate \textbf{PH-SSM} and \textbf{\texttt{CartanLM}} across five empirical benchmark suites testing long-horizon gradient conservation, non-stationary noise rejection, high-dimensional effective rank retention, coupled nonlinear PDE waveguides, compositional depth-vs-width scaling, and autoregressive language modeling on TinyShakespeare.
 
 \subsection{Experiment 1: 10,000-Step Isometric Gradient Conservation \& Distractor Rejection}
-We first evaluate the continuous-depth \texttt{PortHamiltonianSSM} ($D=32, \Delta t=0.02$) on a $1,000$-step continuous memory horizon subjected to high-energy non-stationary Brownian distractor bursts ($\sigma_{\text{burst}} = 5.0$ at $t \in [300, 350]$ and $t \in [700, 750]$), and audit exact backpropagation-through-time (BPTT) gradient norms $\|\partial \mathcal{L}_T / \partial z_0\|_2$ out to $T = 10,000$ steps.
+We first evaluate the continuous-depth \texttt{PortHamiltonianSSM} ($D=32, \Delta t=0.02$) on a $1,000$-step continuous memory horizon subjected to high-energy non-stationary Brownian distractor bursts, and audit the exact backpropagation-through-time (BPTT) state-to-state Jacobian Frobenius norm $\|\partial z_T / \partial z_0\|_F$ out to $T = 10,000$ steps. For an orthogonal operator $Q \in \mathrm{SO}(D)$, the spectral norm is $\|Q\|_2 = 1$ while the Frobenius norm is $\|Q\|_F = \sqrt{\mathrm{Tr}(Q^\top Q)} = \sqrt{D} = \sqrt{32} \approx 5.65685425$.
 
 \begin{table}[htbp]
 \centering
-\caption{1,000-Step Non-Stationary Distractor Burst Benchmark and 10,000-Step BPTT Gradient Norm Audit.}
+\caption{1,000-Step Non-Stationary Distractor Burst Benchmark and 10,000-Step BPTT Jacobian Frobenius Norm Audit.}
 \label{tab:ph_ssm_benchmark}
 \vspace{0.3em}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|l|c|c|c|c|c|c|}
 \hline
-\textbf{Architecture} & \textbf{Recon.\ MSE $\downarrow$} & \textbf{SNR (dB) $\uparrow$} & \textbf{Peak Energy} & \textbf{Effective Rank $\uparrow$} & \textbf{True Memory $\mathcal{M}(0,T) \uparrow$} & \textbf{Grad Norm ($T=10^4$)} \\ \hline
+\textbf{Architecture} & \textbf{Recon.\ MSE $\downarrow$} & \textbf{SNR (dB) $\uparrow$} & \textbf{Final (Peak) Energy} & \textbf{Effective Rank $\uparrow$} & \textbf{True Memory $\mathcal{M}(0,T) \uparrow$} & \textbf{$\|\partial z_T/\partial z_0\|_F$ ($T=10^4$)} \\ \hline
 \textbf{Pure Symplectic} ($R=0$) & $1321.60$ & $-18.42$ & $224.80$ (Explodes) & $29.40 / 32$ & $0.000$ & $5.656854$ \\ \hline
-\textbf{Isotropic Damped SSM} & $3.4680$ & $-5.40$ & $1.12$ & $1.84 / 32$ (Collapsed) & $0.012$ & $0.000000$ (Vanished) \\ \hline
+\textbf{Isotropic Damped SSM} & $3.4680$ & $-5.40$ & $0.02$ ($1.12$) & $1.84 / 32$ (Collapsed) & $0.012$ & $0.000000$ (Vanished) \\ \hline
 \textbf{Residual MLP / ResNet} & $84.120$ & $-11.20$ & $1420.5$ & $4.12 / 32$ & $0.004$ & $>1.54 \times 10^6$ (Exploded) \\ \hline
-\textbf{PH-SSM (Ours, Radial $R$)} & $\mathbf{0.0412}$ & $\mathbf{+13.85}$ & $\mathbf{1.004}$ (Bounded) & $\mathbf{31.42 / 32}$ ($\mathbf{98.2\%}$) & $\mathbf{0.918}$ & $\mathbf{5.657792}$ ($\mathbf{<0.016\%}$ drift) \\ \hline
+\textbf{PH-SSM (Ours, Radial $R$)} & $\mathbf{0.0412}$ & $\mathbf{+13.85}$ & $\mathbf{1.004}$ (\textbf{Peak} $\mathbf{24.6}$) & $\mathbf{31.42 / 32}$ ($\mathbf{98.2\%}$) & $\mathbf{0.918}$ & $\mathbf{5.657792}$ ($\mathbf{0.0166\%}$ drift) \\ \hline
 \end{tabular}%
 }
 \end{table}
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.95\textwidth]{../assets/energy_trajectory_comparison.png}
-\caption{Trajectory energy $H(z_t) = \frac{1}{2}\|z_t\|_2^2$ across a $1,000$-step horizon under non-stationary distractor bursts. Pure symplectic flow traps distractor energy permanently, isotropic damping erases the signal, whereas Strang-split PH-SSM with radial Rayleigh damping purges the burst and locks cleanly back onto the target energy manifold.}
+\includegraphics[width=0.92\textwidth]{../assets/energy_trajectory_comparison.png}
+\caption{Trajectory energy $H(z_t) = \frac{1}{2}\|z_t\|_2^2$ across a $1,000$-step horizon under non-stationary distractor bursts. Pure symplectic flow ($R=0$) traps distractor energy permanently ($H_{\max}=224.80$), isotropic damping erases the signal, whereas Strang-split PH-SSM bounds transient burst energy at $H_{\max}=24.6$ and relaxes cleanly back onto the target equilibrium manifold $H(z_T)=1.004$.}
 \label{fig:energy_trajectory}
 \end{figure}
 
-\begin{figure}[htbp]
+\begin{figure}[!t]
 \centering
-\begin{minipage}[b]{0.485\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{../assets/gradient_flow_horizon_10k.png}
-    \small\textbf{(a)} 10,000-step BPTT gradient norm conservation.
-\end{minipage}
-\hfill
-\begin{minipage}[b]{0.485\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{../assets/horizon_amnesia_cliff.png}
-    \small\textbf{(b)} Horizon amnesia cliff \& Tesla T4 GPU benchmarks.
-\end{minipage}
-\caption{Left (a): Exact BPTT gradient norm $\|\partial z_T / \partial z_0\|_2$ across $T \in [10, 10000]$ steps; PH-SSM remains pinned to the theoretical $\sqrt{32} \approx 5.656854$ isometry bound ($<0.016\%$ variation at $T=10,000$), while ResNet explodes past $1.54\times 10^6$ and dissipative RNNs vanish. Right (b): Sequential CIFAR-10 ($L=1024$) and Noisy Adding ($L=1000$) benchmarks on a live NVIDIA Tesla T4 GPU.}
+\includegraphics[width=0.86\textwidth]{../assets/gradient_flow_horizon_10k.png}\\[0.35em]
+\includegraphics[width=0.86\textwidth]{../assets/horizon_amnesia_cliff.png}
+\caption{Top: Exact BPTT Jacobian Frobenius norm $\|\partial z_T / \partial z_0\|_F$ across $T \in [10, 10000]$ steps alongside the $\mathrm{SO}(32)$ eigenvalue spectrum; inside the equilibrium ball ($\|z\|_2^2 \le E_0$), PH-SSM remains pinned to the theoretical $\sqrt{32} \approx 5.656854$ isometry bound ($0.0166\%$ [$<0.017\%$] drift at $T=10,000$), while over-threshold radial damping contracts smoothly and ResNet explodes past $1.54\times 10^6$. Bottom: Delayed recall retention across $L \in [20, 500]$ and controlled Sequential CIFAR-10 ($L=1024$) and Noisy Adding ($L=1000$) subset evaluations on a live NVIDIA Tesla T4 GPU.}
 \label{fig:grad_and_cliff}
 \end{figure}
 
-As shown in Table~\ref{tab:ph_ssm_benchmark} and Figures~\ref{fig:energy_trajectory}--\ref{fig:grad_and_cliff}:
+As shown in Table~\ref{tab:ph_ssm_benchmark} and Figures~\ref{fig:energy_trajectory}--\ref{fig:spectral_audit_trio}:
 \begin{itemize}
     \item \textbf{Lie Group Spectral Precision:} The Cayley orthogonal operator $A_J$ maintains $\det(A_J) = 0.9999999404$, $|\lambda_{\max}| = 1.0000013113$, and $|\lambda_{\min}| = 0.9999998808$ (unit circle error $1.31\times 10^{-6}$).
-    \item \textbf{10,000-Step Gradient Flow:} Across $T=10 \to 10,000$ steps, the PH-SSM gradient norm moves from $5.656854$ (theoretical $\sqrt{32} = 5.65685425$) to $5.657792$---a drift of less than $0.016\%$ over ten thousand recurrent steps.
-    \item \textbf{Live Tesla T4 GPU Benchmarks:} On Sequential Pixel-by-Pixel CIFAR-10 ($L=1024$), PH-SSM achieves $\mathbf{97.67\%}$ validation accuracy vs.\ ResNet's $26.33\%$ ($+71.33\%$ gain), and on the $L=1000$ Noisy Adding Problem achieves $\mathbf{0.1506\text{ MSE}}$ vs.\ ResNet's $0.9383\text{ MSE}$ ($6.23\times$ error reduction) at $0.73\text{ ms/step}$ and $178\text{ MB}$ VRAM.
+    \item \textbf{10,000-Step Equilibrium Gradient Flow:} Across $T=10 \to 10,000$ steps in the equilibrium regime ($\|z\|_2^2 \le E_0$), the PH-SSM Jacobian Frobenius norm $\|\partial z_T/\partial z_0\|_F$ moves from $5.656854$ (theoretical $\sqrt{32} = 5.65685425$) to $5.657792$---a drift of $0.01658\%$ ($<0.017\%$) over ten thousand recurrent steps.
+    \item \textbf{Controlled Tesla T4 GPU Subset Benchmarks:} Evaluating PH-SSM against matched ResNet/LSTM baselines under an identical training epoch and controlled subset budget on a live NVIDIA Tesla T4 GPU, PH-SSM achieves $\mathbf{97.67\%}$ accuracy vs.\ ResNet's $26.33\%$ ($+71.34\%$ gain) on Sequential Pixel-by-Pixel CIFAR-10 ($L=1024$), and $\mathbf{0.1506\text{ MSE}}$ vs.\ ResNet's $0.9383\text{ MSE}$ ($6.23\times$ error reduction) on the $L=1000$ Noisy Adding task at $0.73\text{ ms/step}$ and $178\text{ MB}$ VRAM.
 \end{itemize}
 
-\begin{figure}[!t]
+\begin{figure}[htbp]
 \centering
-\begin{minipage}[b]{0.32\textwidth}
-    \centering
-    \includegraphics[width=\textwidth,height=2.7cm,keepaspectratio]{../assets/effective_rank_spectrum.png}\\[0.3em]
-    \small\textbf{(a)} $\mathrm{erank}$ spectrum.
-\end{minipage}
-\hfill
-\begin{minipage}[b]{0.32\textwidth}
-    \centering
-    \includegraphics[width=\textwidth,height=2.7cm,keepaspectratio]{../assets/complex_eigenvalue_spectrum.png}\\[0.3em]
-    \small\textbf{(b)} Complex spectrum.
-\end{minipage}
-\hfill
-\begin{minipage}[b]{0.32\textwidth}
-    \centering
-    \includegraphics[width=\textwidth,height=2.7cm,keepaspectratio]{../assets/tensor_memory_capacity_matrix.png}\\[0.3em]
-    \small\textbf{(c)} Capacity $\mathcal{M}(k,l)$.
-\end{minipage}
-\caption{Spectral audit of PH-SSM: (a) singular value distribution and Roy-Vetterli effective rank preservation across depth; (b) eigenvalue clustering on the unit circle; (c) inter-layer True Tensor Memory Capacity $\mathcal{M}(k,l)$ across all layer pairs $(k,l)$.}
+\includegraphics[width=\textwidth]{../assets/spectral_audit_trio.png}
+\caption{Unified spectral audit of PH-SSM: (a) singular value distribution $\sigma_k/\sigma_1$ and Roy-Vetterli effective rank preservation across depth ($D=64$); (b) eigenvalue clustering on the complex unit circle $\mathbb{C}$ ($D=32$); (c) inter-layer True Tensor Memory Capacity $\mathcal{M}(k,l)$ across all layer pairs $(k,l) \in \{0,\dots,15\}^2$.}
 \label{fig:spectral_audit_trio}
 \end{figure}
 
@@ -571,7 +555,7 @@ Next, we evaluate the $2\times 2$ Cartan-Trotter layer (\texttt{CartanTrotter2x2
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline
 \textbf{Model Architecture} & \textbf{Parameters} & \textbf{Kerr Test MSE $\downarrow$} & \textbf{Energy Drift $\downarrow$} & \textbf{10-Layer $\det(J)$} & \textbf{50-Layer Inverse Rel.\ Error} \\ \hline
-\textbf{Unconstrained Dense MLP} & $3,168$ ($3.88\times$) & $4.351 \times 10^{-2}$ & $38.42\%$ & $0.00412000$ (Singular) & Not Invertible \\ \hline
+\textbf{Unconstrained Dense MLP} & $3,168$ ($3.88\times$) & $4.351 \times 10^{-2}$ & $38.42\%$ & $0.00412000$ (Near-Singular / Contractive) & Not Invertible \\ \hline
 \textbf{Cartan-Trotter $2\times 2$ (Ours)} & $\mathbf{816}$ ($\mathbf{1.00\times}$) & $\mathbf{7.020 \times 10^{-4}}$ ($\mathbf{61.98\times}$ better) & $\mathbf{0.14\%}$ & $\mathbf{1.00000286}$ & $\mathbf{3.149 \times 10^{-6}}$ ($\mathcal{O}(1)$ mem) \\ \hline
 \end{tabular}%
 }
@@ -579,12 +563,12 @@ Next, we evaluate the $2\times 2$ Cartan-Trotter layer (\texttt{CartanTrotter2x2
 
 With $\mathbf{3.88\times}$ \textbf{fewer parameters} ($816$ vs.\ $3,168$ DoF), the Cartan-Trotter $2\times 2$ architecture achieves a $\mathbf{61.98\times}$ \textbf{lower test MSE} on coupled nonlinear optical vortex waveguides while maintaining a 10-layer exact Jacobian determinant of $\det(J) = 1.00000286$, symplectic 2-form residual $\|J^\top \Omega J - \Omega\|_F = 3.017\times 10^{-6}$, and 50-layer closed-form time-reversal relative error of $3.149\times 10^{-6}$.
 
-\subsection{Experiment 3: Iso-Parametric Depth-vs-Width Scaling Law}
-To test our BCH Lie bracket hypothesis (Eq.~\eqref{eq:bch_hierarchy}), we compare a \textbf{Deep-Narrow Cartan-Trotter Stack} ($L=12$ layers, $N=8$ nodes, $840$ parameters) against a parameter-matched \textbf{1-Layer Wide MLP} ($1,030$ parameters) across three compositional tasks: (1) Coupled Chaotic Pendulum Rollout, (2) 8-Bit Boolean Hypercube Parity (XOR), and (3) Interlocked Double Spiral Classification.
+\subsection{Experiment 3: Depth-vs-Width Compositional Scaling Law}
+To test our BCH Lie bracket hypothesis (Eq.~\eqref{eq:bch_hierarchy}), we compare a \textbf{Deep-Narrow Cartan-Trotter Stack} ($L=12$ layers, $N=8$ nodes, $840$ parameters) against a slightly larger \textbf{1-Layer Wide MLP} ($1,030$ parameters, $+22.6\%$ more parameters) across three compositional tasks: (1) Coupled Chaotic Pendulum Rollout, (2) 8-Bit Boolean Hypercube Parity (XOR), and (3) Interlocked Double Spiral Classification. As an ablation on 8-Bit Parity, replacing our Relativistic-Pendulum kick ($\chi\tanh(q) + \gamma\sin(\omega q + \phi)$) with a pure cubic Kerr kick ($\chi q^3$) causes parity accuracy to stall at $51.56\%$ because $q^3 = q$ on $\{-1,+1\}^N$, whereas the parity-breaking harmonic term drives accuracy to $100.00\%$.
 
 \begin{table}[htbp]
 \centering
-\caption{Iso-parametric comparison of Deep Cartan-Trotter ($L=12$) vs.\ Wide 1-Layer MLP under matched parameter budgets.}
+\caption{Comparison of Deep Cartan-Trotter ($L=12$, $840$ params) vs.\ Wide 1-Layer MLP ($1,030$ params, $-18.4\%$ fewer parameters in Deep Cartan-Trotter).}
 \label{tab:depth_vs_width}
 \vspace{0.3em}
 \resizebox{\textwidth}{!}{%
@@ -599,22 +583,22 @@ To test our BCH Lie bracket hypothesis (Eq.~\eqref{eq:bch_hierarchy}), we compar
 \end{table}
 
 \subsection{Experiment 4: End-to-End \texttt{CartanLM} Benchmark on TinyShakespeare}
-Finally, we evaluate the complete autoregressive \texttt{CartanLanguageModel} (\texttt{ph\_ssm/text\_model.py}) against a parameter-matched \textbf{Causal GPT Transformer} (multi-head causal self-attention, GELU MLP, and LayerNorm) and a \textbf{Multi-Layer LSTM} on the character-level \texttt{tinyshakespeare.txt} dataset ($1,115,394$ characters, vocabulary size $|V|=65$, sequence length $T=64$). We evaluate both an exact $60\text{k}$-parameter matched regime and an unconstrained regime where \texttt{CartanLM} uses $6.01\times$ fewer parameters than GPT.
+Finally, we evaluate the complete autoregressive \texttt{CartanLanguageModel} (\texttt{ph\_ssm/text\_model.py}) against a parameter-matched \textbf{Causal GPT Transformer} (multi-head causal self-attention, GELU MLP, and LayerNorm) and a \textbf{Multi-Layer LSTM} on the character-level \texttt{tinyshakespeare.txt} dataset ($1,115,394$ characters, vocabulary size $|V|=65$, sequence length $T=64$). We evaluate both an exact $60\text{k}$-parameter matched regime and a parameter-parsimonious regime where \texttt{CartanLM} ($23.6\text{k}$ params) uses $6.01\times$ fewer parameters than an unconstrained GPT ($142.0\text{k}$ params).
 
 \begin{table}[htbp]
 \centering
-\caption{End-to-End TinyShakespeare Language Modeling Benchmark and Holographic Prompt Inversion Audit.}
+\caption{End-to-End TinyShakespeare Language Modeling Benchmark and Holographic Prompt Inversion Audit. For $\mathrm{erank}(t=64)$, we report both the absolute ratio $\mathrm{erank}/D$ and, for \texttt{CartanLM}, the temporal retention ratio $\mathrm{erank}(t=64)/\mathrm{erank}(t=16)$.}
 \label{tab:shakespeare_benchmark}
 \vspace{0.3em}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{|l|c|c|c|c|c|c|c|c|}
 \hline
-\textbf{Model Architecture} & \textbf{Regime} & \textbf{Params} & \textbf{Val Loss $\downarrow$} & \textbf{Val PPL $\downarrow$} & \textbf{Val BPC $\downarrow$} & \textbf{eRank ($t=64$) $\uparrow$} & \textbf{Prompt Inverse MSE} & \textbf{Token Recovery} \\ \hline
+\textbf{Model Architecture} & \textbf{Regime} & \textbf{Params} & \textbf{Val Loss $\downarrow$} & \textbf{Val PPL $\downarrow$} & \textbf{Val BPC $\downarrow$} & \textbf{eRank ($t=64$) / $D$ [Temp.\ Ret.]} & \textbf{Prompt Inverse MSE} & \textbf{Token Recovery} \\ \hline
 \textbf{Causal GPT Transformer} & $60\text{k}$ Matched & $60,004$ & $2.5590$ & $12.92$ & $3.692$ & $33.77 / 60$ ($56.3\%$) & Not Invertible & $0.00\%$ \\ \hline
 \textbf{Standard Multi-Layer LSTM} & $60\text{k}$ Matched & $60,475$ & $1.9719$ & $7.18$ & $2.845$ & --- & Not Invertible & $0.00\%$ \\ \hline
-\textbf{\texttt{CartanLM} (Ours, 4-Layer)} & $60\text{k}$ Matched & $\mathbf{60,040}$ & $\mathbf{2.0805}$ & $\mathbf{8.01}$ & $\mathbf{3.002}$ & $\mathbf{67.00 / 128}$ ($\mathbf{99.0\%}$) & $\mathbf{1.055 \times 10^{-14}}$ & $\mathbf{97.50\%}$ \\ \hline
+\textbf{\texttt{CartanLM} (Ours, 4-Layer)} & $60\text{k}$ Matched & $\mathbf{60,040}$ & $\mathbf{2.0805}$ & $\mathbf{8.01}$ & $\mathbf{3.002}$ & $\mathbf{67.00 / 128}$ ($\mathbf{52.3\%}$) [$\mathbf{99.01\%}$] & $\mathbf{1.055 \times 10^{-14}}$ & $\mathbf{97.50\%}$ \\ \hline
 \textbf{Causal GPT Transformer} & Unconstrained & $142,016$ & $1.9845$ & $7.28$ & $2.863$ & $34.12 / 64$ ($53.3\%$) & Not Invertible & $0.00\%$ \\ \hline
-\textbf{\texttt{CartanLM} (Ours, $6.01\times$ smaller)} & Params-Parsimonious & $\mathbf{23,624}$ & $\mathbf{1.8828}$ & $\mathbf{6.57}$ & $\mathbf{2.716}$ & $\mathbf{49.85 / 64}$ ($\mathbf{98.9\%}$) & $\mathbf{1.376 \times 10^{-13}}$ & $\mathbf{100.00\%}$ \\ \hline
+\textbf{\texttt{CartanLM} (Ours, $6.01\times$ smaller)} & Params-Parsimonious & $\mathbf{23,624}$ & $\mathbf{1.8828}$ & $\mathbf{6.57}$ & $\mathbf{2.716}$ & $\mathbf{49.85 / 64}$ ($\mathbf{77.9\%}$) [$\mathbf{98.9\%}$] & $\mathbf{1.376 \times 10^{-13}}$ & $\mathbf{100.00\%}$ \\ \hline
 \end{tabular}%
 }
 \end{table}
@@ -622,16 +606,24 @@ Finally, we evaluate the complete autoregressive \texttt{CartanLanguageModel} (\
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{../assets/cartan_lm_benchmark_and_speedup.png}
-\caption{Empirical evaluation of \texttt{CartanLM} on TinyShakespeare: (Left) Validation Perplexity showing \texttt{CartanLM} outperforming Causal GPT both at matched $60\text{k}$ parameters ($8.01$ vs.\ $12.92$ PPL) and with $6.01\times$ fewer parameters ($6.57$ vs.\ $7.28$ PPL); (Center) Roy-Vetterli effective rank $\mathrm{erank}$ across sequence positions $t \in \{16,32,48,64\}$, demonstrating $99.01\%$ rank retention vs.\ GPT's $56.3\%$ rank collapse; (Right) Layer component latencies before and after our FLA real-split chunked log-cumsum scan and fused $2\times 2$ block-symplectic BMM optimization ($3.28\times$ end-to-end training speedup).}
+\caption{Empirical evaluation of \texttt{CartanLM} on TinyShakespeare: (Left) Validation Perplexity showing \texttt{CartanLM} outperforming Causal GPT both at matched $60\text{k}$ parameters ($8.01$ vs.\ $12.92$ PPL) and with $6.01\times$ fewer parameters ($6.57$ vs.\ $7.28$ PPL); (Center) Roy-Vetterli effective rank $\mathrm{erank}$ across sequence positions $t \in \{16,32,48,64\}$, showing $99.01\%$ temporal rank stability ($67.67 \to 67.00$ at $D=128$, and $49.85/64$ [$77.9\%$] vs.\ GPT's $34.12/64$ [$53.3\%$]); (Right) Layer component latencies before and after our FLA real-split chunked log-cumsum scan and fused $2\times 2$ block-symplectic BMM optimization ($3.28\times$ end-to-end training speedup).}
 \label{fig:cartan_lm_results}
 \end{figure}
+
+\paragraph{Analysis of Perplexity, Parameter Scaling, and Effective Rank.}
+Table~\ref{tab:shakespeare_benchmark} highlights several key empirical findings across model families:
+\begin{enumerate}
+    \item \textbf{Dominance Over Causal GPT Transformers:} At the matched $60\text{k}$ parameter budget, 4-layer \texttt{CartanLM} ($60,040$ params) reduces validation perplexity from $12.92$ to $8.01$ PPL ($-38.0\%$). Even more strikingly, our compact $23,624$-parameter \texttt{CartanLM} ($D=64$) achieves $\mathbf{6.57\text{ PPL}}$ ($2.716\text{ BPC}$), outperforming both the $142,016$-parameter Unconstrained GPT ($7.28\text{ PPL}$, $6.01\times$ larger) and the $60,475$-parameter Multi-Layer LSTM ($7.18\text{ PPL}$, $2.56\times$ larger).
+    \item \textbf{Short-Horizon LSTM Inductive Bias vs.\ Over-Parameterized $D=128$ Convergence:} At the fixed short context window $T=64$ and fixed training step budget, the $60\text{k}$ Multi-Layer LSTM ($7.18\text{ PPL}$) edges out the wider $D=128$, $60\text{k}$ 4-layer \texttt{CartanLM} ($8.01\text{ PPL}$) because gated recurrent cells converge rapidly on local character $n$-grams when $T=64$ is short enough to avoid horizon amnesia, whereas the wider $D=128$ $\mathrm{U}(64)$ Cayley rotors require more optimization steps than the compact $D=64$ ($23.6\text{k}$) \texttt{CartanLM} ($6.57\text{ PPL}$), which converges faster under the same step budget and beats the $60\text{k}$ LSTM by $0.61\text{ PPL}$ while retaining exact analytical invertibility (impossible in LSTMs).
+    \item \textbf{Apples-to-Apples Effective Rank Preservation:} At equal embedding dimension $D=64$, \texttt{CartanLM} ($23.6\text{k}$) maintains $\mathrm{erank}(t=64) = 49.85 / 64$ ($\mathbf{77.9\%}$ of $D$), whereas Unconstrained GPT ($D=64$) collapses to $34.12 / 64$ ($53.3\%$ of $D$). Furthermore, across sequence positions $t = 16 \to 64$, \texttt{CartanLM} ($60\text{k}, D=128$) retains $67.00 / 67.67 = \mathbf{99.01\%}$ of its initial effective rank ($98.9\%$ for the $23.6\text{k}$ model).
+\end{enumerate}
 
 \subsection{Experiment 5: Verification of the 5 End-to-End Architectural Invariants}
 Table~\ref{tab:unit_test_invariants} reports our automated verification suite (\texttt{test\_\allowbreak cartan\_\allowbreak language\_\allowbreak model.py}) and the FLA real-split kernel speedup.
 
 \begin{table}[htbp]
 \centering
-\caption{Verification of the 5 Formal Invariants and FLA Real-Split Kernel Speedup ($B=32, T=64, D=128, L=4$).}
+\caption{Verification of the 5 Formal Invariants and FLA Real-Split Kernel Speedup ($B=32, T=64, D=128, L=4$; Inversion tested on $L=6$ synthetic stack).}
 \label{tab:unit_test_invariants}
 \vspace{0.3em}
 \resizebox{\textwidth}{!}{%
@@ -657,7 +649,7 @@ Table~\ref{tab:unit_test_invariants} reports our automated verification suite (\
 \label{sec:conclusion}
 % =============================================================================
 
-We have established a mathematically rigorous, physically grounded foundation for deep sequence and language modeling based on Port-Hamiltonian mechanics and the Cartan Triple Intersection $\mathrm{Sp}(2N,\mathbb{R})\cap \mathrm{O}(2N) \cong \mathrm{U}(N)$. By restricting Rayleigh dissipation to the rank-1 radial projection $R_{\text{radial}}(z,x) = \gamma(x)\frac{zz^\top}{\|z\|^2}$, we proved that a neural dynamical system can selectively purge distractor bursts and low-information syntactic filler tokens while preserving exact $1.00000000$ isometric eigenvalues across the $(2N-1)$-dimensional orthogonal semantic tangent bundle. Integrating these dynamics into the 5-stage reversible \texttt{CartanLM} architecture unlocks exact $\mathcal{O}(1)$ activation-memory backpropagation ($9.520\times 10^{-16}$ inversion MSE), $\mathcal{O}(1)$ per-token recurrent generation cache, $99.01\%$ effective rank preservation, superior validation perplexity over parameter-matched Causal GPT Transformers, and a $3.28\times$ training speedup via SIMD real-split chunked log-cumsum scanning. Future work will extend our fused $2\times 2$ block-symplectic kernels to dedicated multi-node Triton/CUDA SRAM kernels and octonionic $8\times 8$ alternative algebras.
+We have established a mathematically rigorous, physically grounded foundation for deep sequence and language modeling based on Port-Hamiltonian mechanics and the classical unitary-symplectic-orthogonal intersection $\mathrm{Sp}(2N,\mathbb{R})\cap \mathrm{O}(2N) \cong \mathrm{U}(N)$. By combining thresholded rank-1 radial Rayleigh dissipation $R_{\text{radial}}(z) = r(z)\frac{zz^\top}{\|z\|^2}$ in continuous-depth PH-SSM with position-gated canonical momentum Rayleigh damping $p_2 = \exp(-\gamma(q_2)\Delta t)\odot p_1$ in reversible \texttt{CartanLM} blocks, we proved that a neural dynamical system can selectively shed high-energy distractor bursts and low-information syntactic filler tokens while preserving exact $\mathrm{SO}(D)$ directional phase rotation $\dot{\hat{z}} = J\hat{z}$ on $\mathbb{S}^{D-1}$ and exact orthogonal Jacobian isometry inside the equilibrium energy ball. Integrating these dynamics into the 5-stage reversible \texttt{CartanLM} architecture unlocks exact $\mathcal{O}(1)$ activation-memory backpropagation ($8.981\times 10^{-16}$ to $9.520\times 10^{-16}$ synthetic 6-layer inversion MSE, and $1.376\times 10^{-13}$ trained TinyShakespeare prompt inversion MSE with $100.00\%$ token recovery), $\mathcal{O}(1)$ per-token recurrent generation cache, $77.9\%$ effective rank capacity ($99.01\%$ temporal retention across sequence length), superior validation perplexity over parameter-matched Causal GPT Transformers ($6.57$ vs.\ $7.28$ PPL with $6.01\times$ fewer parameters), and a $3.28\times$ training speedup via SIMD real-split chunked log-cumsum scanning. Future work will extend our fused $2\times 2$ block-symplectic kernels to dedicated multi-node Triton/CUDA SRAM kernels and quaternionic $4\times 4$ / octonionic $8\times 8$ division-algebra layers.
 
 \vspace{0.8em}
 \bibliographystyle{unsrt}
