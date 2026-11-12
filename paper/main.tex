@@ -50,7 +50,7 @@ Deep sequence architectures and autoregressive language models face a fundamenta
 
 In this paper, we resolve this trilemma from first principles of geometric mechanics and Lie group theory. First, we introduce the \textbf{Port-Hamiltonian State-Space Model (PH-SSM)}, governing inter-layer and sequence dynamics via a continuous skew-symmetric Poisson interconnection $J = -J^\top \in \mathfrak{so}(D)$ paired with rank-1 \textbf{Radial Rayleigh Damping} $R_{\text{radial}}(z) = r(z)\frac{zz^\top}{\|z\|^2}$, integrated via a second-order symmetric Strang splitting scheme. We prove that this formulation strictly confines energy dissipation to the 1D radial ray while preserving exact $1.00000000$ isometric eigenvalues across the $(D-1)$-dimensional orthogonal semantic tangent bundle $T_z\mathbb{S}^{D-1}$. Across a $10,000$-step backpropagation-through-time (BPTT) horizon, PH-SSM exhibits $<0.016\%$ gradient norm deviation ($5.656854 \to 5.657792$) and achieves $97.67\%$ validation accuracy on Sequential CIFAR-10 ($L=1024$), outperforming ResNet baselines by $+71.33\%$.
 
-Second, we elevate the scalar neuron to a canonical $2\times 2$ symplectic phase-plane rotor $(q_i, p_i) \in \mathbb{R}^2$ governed by the \textbf{Cartan Triple Intersection} $\mathrm{Sp}(2N,\mathbb{R}) \cap \mathrm{O}(2N) \cong \mathrm{U}(N) \cong \mathcal{M}_N(\mathcal{C}\ell^0(2,0))$. Resolving the mathematical impossibility of non-diagonal lower-triangular unitary matrices, we construct the end-to-end \textbf{Cartan $2\times 2$ Language Model (\texttt{CartanLM})}. Each causal block executes a 5-stage reversible operator split: (i) Lipschitz-bounded Relativistic-Pendulum symplectic kicks ($f(q) = \chi\tanh(q) + \gamma\sin(\omega q + \phi)$) with exact unit Jacobian determinant $\det(J) \equiv 1.00000000$, (ii) causal temporal sequence mixing via an $\mathcal{O}(T)$ Flash-Linear-Attention (FLA) style real-split chunked log-cumsum scan, (iii) token-gated radial Rayleigh syntax purging, and (iv) multi-head $\mathrm{U}(N)$ Cayley channel rotors fused via $2\times 2$ block-symplectic batched matrix multiplications (\texttt{torch.bmm}). We prove that \texttt{CartanLM} admits an exact closed-form analytical inverse, enabling $\mathcal{O}(1)$ activation-memory backpropagation and reconstructing 40-token Shakespeare prompts from final-layer hidden states with $8.981\times 10^{-16}$ MSE ($100.00\%$ token match) and zero saved intermediate activations. On TinyShakespeare character-level language modeling, \texttt{CartanLM} outperforms parameter-matched Causal GPT Transformers in validation perplexity ($8.01$ vs.\ $12.92$ PPL at $60\text{k}$ parameters, and $6.57$ vs.\ $7.28$ PPL with $6.01\times$ fewer parameters) while preserving $99.01\%$ effective rank ($67.00$ vs.\ GPT's collapse to $33.77$) and achieving a $3.28\times$ end-to-end training speedup via SIMD real-split chunked scanning.
+Second, we elevate the scalar neuron to a canonical $2\times 2$ symplectic phase-plane rotor $(q_i, p_i) \in \mathbb{R}^2$ governed by the \textbf{Cartan Triple Intersection} $\mathrm{Sp}(2N,\mathbb{R}) \cap \mathrm{O}(2N) \cong \mathrm{U}(N) \cong \mathcal{M}_N(\mathcal{C}\ell^0(2,0))$. Resolving the mathematical impossibility of non-diagonal lower-triangular unitary matrices, we construct the end-to-end \textbf{Cartan $2\times 2$ Language Model (\texttt{CartanLM})}. Each causal block executes a 5-stage reversible operator split: (i) Lipschitz-bounded Relativistic-Pendulum symplectic kicks ($f(q) = \chi\tanh(q) + \gamma\sin(\omega q + \phi)$) with exact unit Jacobian determinant $\det(J) \equiv 1.00000000$, (ii) causal temporal sequence mixing via an $\mathcal{O}(T)$ Flash-Linear-Attention (FLA) style real-split chunked log-cumsum scan, (iii) token-gated radial Rayleigh syntax purging, (iv) multi-head $\mathrm{U}(N)$ Cayley channel rotors fused via $2\times 2$ block-symplectic batched matrix multiplications (\texttt{torch.bmm}), and (v) a second half-step relativistic-pendulum symplectic kick. We prove that \texttt{CartanLM} admits an exact closed-form analytical inverse, enabling $\mathcal{O}(1)$ activation-memory backpropagation and reconstructing 40-token Shakespeare prompts from final-layer hidden states with $8.981\times 10^{-16}$ MSE ($100.00\%$ token match) and zero saved intermediate activations. On TinyShakespeare character-level language modeling, \texttt{CartanLM} outperforms parameter-matched Causal GPT Transformers in validation perplexity ($8.01$ vs.\ $12.92$ PPL at $60\text{k}$ parameters, and $6.57$ vs.\ $7.28$ PPL with $6.01\times$ fewer parameters) while preserving $99.01\%$ effective rank ($67.00$ vs.\ GPT's collapse to $33.77$) and achieving a $3.28\times$ end-to-end training speedup via SIMD real-split chunked scanning.
 \end{abstract}
 
 \vspace{0.4em}
@@ -77,11 +77,11 @@ The foundational challenge of deep sequence modeling and ultra-deep neural repre
     Even when energy is stabilized via standard isotropic damping ($A = -\alpha I + J$) or standard Transformer attention layers, the singular value spectrum $\sigma_1(Z) \ge \sigma_2(Z) \ge \dots \ge \sigma_D(Z)$ of the hidden representation matrix $Z \in \mathbb{R}^{B\times D}$ contracts unevenly. As shown by Dong et al.\ \cite{dong2021attention} for self-attention and analyzed via the Roy-Vetterli effective rank \cite{roy2007effective,garrido2023rankme,jing2022understanding}, standard dissipative or unregularized deep transformations collapse the representation manifold onto a degenerate low-dimensional subspace ($\mathrm{erank}(Z) \ll D$), destroying the model's capacity to multiplex independent features.
 \end{enumerate}
 
-\begin{figure}[htbp]
+\begin{figure}[!t]
 \centering
 \begin{tikzpicture}[
-    node distance=1.3cm,
-    box/.style={rectangle, rounded corners=5pt, draw=darkblue, thick, fill=cardbg, text width=13.5cm, align=left, inner sep=9pt, font=\small},
+    node distance=1.15cm,
+    box/.style={rectangle, rounded corners=5pt, draw=darkblue, thick, fill=cardbg, text width=13.5cm, align=left, inner sep=8pt, font=\small},
     arrow/.style={-{Stealth[length=3mm,width=2mm]}, very thick, draw=tealaccent}
 ]
 \node[box] (s1) {
@@ -161,7 +161,7 @@ Roy and Vetterli \cite{roy2007effective} defined the effective rank ($\mathrm{er
 \end{table}
 
 % =============================================================================
-\section{Mathematical Formulation of the Port-Hamiltonian State-Space Model (PH-SSM)}
+\section[Mathematical Formulation of PH-SSM]{Mathematical Formulation of the Port-Hamiltonian State-Space Model (PH-SSM)}
 \label{sec:ph_ssm}
 % =============================================================================
 
@@ -348,7 +348,7 @@ Why does stacking $L$ deep Cartan-Trotter layers of width $N$ dramatically outpe
 While a 1-layer wide network has Lie bracket nesting depth $0$, an $L$-layer Cartan-Trotter stack generates $2^L$-order compositional polynomial and trigonometric interactions while keeping its Jacobian determinant strictly pinned to $\det(J_{\text{total}}) = \prod_{\ell=1}^L \det(J_\ell) = 1^L \equiv 1.00000000$.
 
 % =============================================================================
-\section{\texttt{CartanLM}: End-to-End Port-Hamiltonian Language Model Architecture}
+\section[\texttt{CartanLM}: End-to-End Port-Hamiltonian LM Architecture]{\texttt{CartanLM}: End-to-End Port-Hamiltonian\\ Language Model Architecture}
 \label{sec:cartan_lm}
 % =============================================================================
 
@@ -389,13 +389,16 @@ Because $|\tanh(q_i)| \le 1$ and $|\sin(\omega_i q_i + \phi_i)| \le 1$, the kick
 \end{equation}
 
 \subsection{The 5-Stage Reversible \texttt{CartanBlock} Pipeline}
+As illustrated in Figure~\ref{fig:cartan_block_diagram}, each layer of \texttt{CartanLM} executes a symmetric 5-stage Strang operator split that updates the canonical phase-plane coordinates $z^{(\ell)} = (q, p) \in \mathbb{R}^{B \times T \times 2N}$. Stage 1 executes a non-linear symplectic shear kick $p_1 = p - \frac{\Delta t}{2} f(q)$ governed by our Lipschitz-bounded relativistic-pendulum force; because the update is strictly triangular, its Jacobian determinant is identically $\det(J_1) = 1.00000000$. Stage 2 couples the canonical momentum $p_1$ into the coordinate plane via the causal associative SSM scan $q_2 = q_1 + \Delta t \cdot \mathrm{SSM}(p_1)$, propagating sequence context with strict causality ($\partial q_{2,t}/\partial p_{1,t+k} \equiv 0$ for all $k \ge 1$). Stage 3 performs token-gated radial Rayleigh damping, attenuating momentum coordinates $p_2 = \exp(-\gamma(q_2)\Delta t) p_1$ according to syntax content while strictly preserving semantic tangent angles. Stage 4 applies a multi-head $\mathrm{U}(N)$ Cayley unitary rotation across channels via fused block-symplectic operations ($W^\top = W^{-1}$). Finally, Stage 5 applies the second half-step relativistic-pendulum kick $p_4 = p_3 - \frac{\Delta t}{2} f(q_3)$, completing the second-order symmetric composition.
 
-\begin{figure}[htbp]
+Following the $L$-layer \texttt{CartanBlock} stack, the final phase state $z^{(L)}$ is normalized via \texttt{RMSNorm} and projected back to vocabulary logits through a weight-tied embedding head ($W_{\text{head}} \equiv E$).
+
+\begin{figure}[!t]
 \centering
 \begin{tikzpicture}[
-    node distance=0.7cm,
-    stagebox/.style={rectangle, rounded corners=4pt, draw=darkblue, thick, fill=cardbg, text width=13.5cm, align=flush left, inner sep=7pt, font=\small},
-    headerbox/.style={rectangle, rounded corners=4pt, draw=tealaccent, very thick, fill=tealaccent!10, text width=13.5cm, align=center, inner sep=6pt, font=\bfseries\small},
+    node distance=0.65cm,
+    stagebox/.style={rectangle, rounded corners=4pt, draw=darkblue, thick, fill=cardbg, text width=13.5cm, align=flush left, inner sep=6pt, font=\small},
+    headerbox/.style={rectangle, rounded corners=4pt, draw=tealaccent, very thick, fill=tealaccent!10, text width=13.5cm, align=center, inner sep=5pt, font=\bfseries\small},
     arr/.style={-{Stealth[length=2.8mm,width=2mm]}, very thick, draw=darkblue}
 ]
 \node[headerbox] (in) {Input Canonical Phase State: $z^{(\ell)} = (q, p) \in \mathbb{R}^{B \times T \times 2N}$ ($q, p \in \mathbb{R}^{B\times T\times N}$)};
@@ -438,9 +441,6 @@ Because $|\tanh(q_i)| \le 1$ and $|\sin(\omega_i q_i + \phi_i)| \le 1$, the kick
 \label{fig:cartan_block_diagram}
 \end{figure}
 
-As depicted in Figure~\ref{fig:cartan_block_diagram}, \texttt{CartanLM} maps input token indices $\mathrm{idx} \in \{0,\dots,|V|-1\}^{B\times T}$ through a token embedding table $E \in \mathbb{R}^{|V|\times 2N}$, passes the phase state $z^{(0)} = (q^{(0)}, p^{(0)})$ through a stack of $L$ causal \texttt{CartanBlock} layers, applies \texttt{RMSNorm}, and projects back to vocabulary logits via a weight-tied language model head ($W_{\text{head}} \equiv E$).
-
-\clearpage
 % =============================================================================
 \section{Holographic Zero-Activation Reversibility and FLA Chunked Scan}
 \label{sec:holographic_inversion}
@@ -536,24 +536,24 @@ As shown in Table~\ref{tab:ph_ssm_benchmark} and Figures~\ref{fig:energy_traject
     \item \textbf{Live Tesla T4 GPU Benchmarks:} On Sequential Pixel-by-Pixel CIFAR-10 ($L=1024$), PH-SSM achieves $\mathbf{97.67\%}$ validation accuracy vs.\ ResNet's $26.33\%$ ($+71.33\%$ gain), and on the $L=1000$ Noisy Adding Problem achieves $\mathbf{0.1506\text{ MSE}}$ vs.\ ResNet's $0.9383\text{ MSE}$ ($6.23\times$ error reduction) at $0.73\text{ ms/step}$ and $178\text{ MB}$ VRAM.
 \end{itemize}
 
-\begin{figure}[htbp]
+\begin{figure}[!t]
 \centering
 \begin{minipage}[b]{0.32\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{../assets/effective_rank_spectrum.png}
-    \small\textbf{(a)} Roy-Vetterli $\mathrm{erank}$ spectrum.
+    \includegraphics[width=\textwidth,height=2.7cm,keepaspectratio]{../assets/effective_rank_spectrum.png}\\[0.3em]
+    \small\textbf{(a)} $\mathrm{erank}$ spectrum.
 \end{minipage}
 \hfill
 \begin{minipage}[b]{0.32\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{../assets/complex_eigenvalue_spectrum.png}
-    \small\textbf{(b)} Complex unit circle spectrum.
+    \includegraphics[width=\textwidth,height=2.7cm,keepaspectratio]{../assets/complex_eigenvalue_spectrum.png}\\[0.3em]
+    \small\textbf{(b)} Complex spectrum.
 \end{minipage}
 \hfill
 \begin{minipage}[b]{0.32\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{../assets/tensor_memory_capacity_matrix.png}
-    \small\textbf{(c)} Inter-layer $\mathcal{M}(k,l)$ matrix.
+    \includegraphics[width=\textwidth,height=2.7cm,keepaspectratio]{../assets/tensor_memory_capacity_matrix.png}\\[0.3em]
+    \small\textbf{(c)} Capacity $\mathcal{M}(k,l)$.
 \end{minipage}
 \caption{Spectral audit of PH-SSM: (a) singular value distribution and Roy-Vetterli effective rank preservation across depth; (b) eigenvalue clustering on the unit circle; (c) inter-layer True Tensor Memory Capacity $\mathcal{M}(k,l)$ across all layer pairs $(k,l)$.}
 \label{fig:spectral_audit_trio}
@@ -614,7 +614,7 @@ Finally, we evaluate the complete autoregressive \texttt{CartanLanguageModel} (\
 \textbf{Standard Multi-Layer LSTM} & $60\text{k}$ Matched & $60,475$ & $1.9719$ & $7.18$ & $2.845$ & --- & Not Invertible & $0.00\%$ \\ \hline
 \textbf{\texttt{CartanLM} (Ours, 4-Layer)} & $60\text{k}$ Matched & $\mathbf{60,040}$ & $\mathbf{2.0805}$ & $\mathbf{8.01}$ & $\mathbf{3.002}$ & $\mathbf{67.00 / 128}$ ($\mathbf{99.0\%}$) & $\mathbf{1.055 \times 10^{-14}}$ & $\mathbf{97.50\%}$ \\ \hline
 \textbf{Causal GPT Transformer} & Unconstrained & $142,016$ & $1.9845$ & $7.28$ & $2.863$ & $34.12 / 64$ ($53.3\%$) & Not Invertible & $0.00\%$ \\ \hline
-\textbf{\texttt{CartanLM} (Ours, $6.01\times$ smaller)} & Parms-Parsimonious & $\mathbf{23,624}$ & $\mathbf{1.8828}$ & $\mathbf{6.57}$ & $\mathbf{2.716}$ & $\mathbf{49.85 / 64}$ ($\mathbf{98.9\%}$) & $\mathbf{1.376 \times 10^{-13}}$ & $\mathbf{100.00\%}$ \\ \hline
+\textbf{\texttt{CartanLM} (Ours, $6.01\times$ smaller)} & Params-Parsimonious & $\mathbf{23,624}$ & $\mathbf{1.8828}$ & $\mathbf{6.57}$ & $\mathbf{2.716}$ & $\mathbf{49.85 / 64}$ ($\mathbf{98.9\%}$) & $\mathbf{1.376 \times 10^{-13}}$ & $\mathbf{100.00\%}$ \\ \hline
 \end{tabular}%
 }
 \end{table}
@@ -639,15 +639,15 @@ Table~\ref{tab:unit_test_invariants} reports our automated verification suite (\
 \hline
 \textbf{Invariant / Profiling Metric} & \textbf{Theoretical Target} & \textbf{Measured Value (Before)} & \textbf{Measured Value (After FLA Opt)} \\ \hline
 \textbf{1. Weight-Tying Duality} (\texttt{lm\_head.weight is tok\_emb.weight}) & \texttt{True} & \texttt{True} & \texttt{True} \\ \hline
-\textbf{2. 6-Layer Analytical Inversion MSE} ($\|h_0 - \mathrm{ Invert}(h_6)\|_2^2$) & $0.000\text{e}+00$ & $8.981 \times 10^{-16}$ & $\mathbf{9.520 \times 10^{-16}}$ \\ \hline
+\textbf{2. 6-Layer Analytical Inversion MSE} ($\|h_0 - \mathrm{Invert}(h_6)\|_2^2$) & $0.000\times 10^0$ & $8.981 \times 10^{-16}$ & $\mathbf{9.520 \times 10^{-16}}$ \\ \hline
 \textbf{3. Holographic Token Recovery Accuracy} & $100.00\%$ & $100.00\%$ & $\mathbf{100.00\%}$ \\ \hline
-\textbf{4. Strict Causality} ($\|\partial\text{out}_{10} / \partial\text{in}_{t\ge 11}\|_F$) & $0.000\text{e}+00$ & $0.0000 \times 10^0$ & $\mathbf{0.0000 \times 10^0}$ \\ \hline
+\textbf{4. Strict Causality} ($\|\partial\text{out}_{10} / \partial\text{in}_{t\ge 11}\|_F$) & $0.000\times 10^0$ & $0.0000 \times 10^0$ & $\mathbf{0.0000 \times 10^0}$ \\ \hline
 \textbf{5. Autoregressive Cache Equivalence} ($\mathcal{O}(1)$ step vs.\ sequence) & \texttt{True} & \texttt{True} & \texttt{True} \\ \hline
 \textbf{Causal Token Mixer Forward Latency} & --- & $15.206\text{ ms}$ & $\mathbf{7.406\text{ ms}}$ ($\mathbf{2.05\times}$ faster) \\ \hline
 \textbf{Multi-Head Channel Rotor Forward Latency} & --- & $8.347\text{ ms}$ & $\mathbf{2.199\text{ ms}}$ ($\mathbf{3.80\times}$ faster) \\ \hline
 \textbf{Relativistic-Pendulum Kick Latency} & --- & $2.470\text{ ms}$ & $\mathbf{1.573\text{ ms}}$ ($\mathbf{1.57\times}$ faster) \\ \hline
 \textbf{Total \texttt{CartanBlock} Layer Forward Latency} & --- & $28.904\text{ ms}$ & $\mathbf{13.158\text{ ms}}$ ($\mathbf{2.20\times}$ faster) \\ \hline
-\textbf{5-Step End-to-End Training Wall-Clock (FWD+BWD)} & --- & $2.071\text{ s}$ & $\mathbf{0.632\text{ s}}$ ($\mathbf{3.28\times}$ \textbf{faster}) \\ \hline
+\textbf{5-Step End-to-End Training Wall-Clock (FWD+BWD)} & --- & $2.071\text{ s}$ & $\mathbf{0.632\text{ s}}$ ($\mathbf{3.28\times}$ faster) \\ \hline
 \end{tabular}%
 }
 \end{table}
@@ -659,7 +659,7 @@ Table~\ref{tab:unit_test_invariants} reports our automated verification suite (\
 
 We have established a mathematically rigorous, physically grounded foundation for deep sequence and language modeling based on Port-Hamiltonian mechanics and the Cartan Triple Intersection $\mathrm{Sp}(2N,\mathbb{R})\cap \mathrm{O}(2N) \cong \mathrm{U}(N)$. By restricting Rayleigh dissipation to the rank-1 radial projection $R_{\text{radial}}(z,x) = \gamma(x)\frac{zz^\top}{\|z\|^2}$, we proved that a neural dynamical system can selectively purge distractor bursts and low-information syntactic filler tokens while preserving exact $1.00000000$ isometric eigenvalues across the $(2N-1)$-dimensional orthogonal semantic tangent bundle. Integrating these dynamics into the 5-stage reversible \texttt{CartanLM} architecture unlocks exact $\mathcal{O}(1)$ activation-memory backpropagation ($9.520\times 10^{-16}$ inversion MSE), $\mathcal{O}(1)$ per-token recurrent generation cache, $99.01\%$ effective rank preservation, superior validation perplexity over parameter-matched Causal GPT Transformers, and a $3.28\times$ training speedup via SIMD real-split chunked log-cumsum scanning. Future work will extend our fused $2\times 2$ block-symplectic kernels to dedicated multi-node Triton/CUDA SRAM kernels and octonionic $8\times 8$ alternative algebras.
 
-\newpage
+\vspace{0.8em}
 \bibliographystyle{unsrt}
 \bibliography{references}
 
