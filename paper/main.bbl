@@ -1,0 +1,178 @@
+\begin{thebibliography}{10}
+
+\bibitem{gu2022efficiently}
+Albert Gu, Karan Goel, and Christopher R{\'e}.
+\newblock Efficiently modeling long sequences with structured state spaces.
+\newblock In {\em International Conference on Learning Representations (ICLR)},
+  2022.
+
+\bibitem{smith2023simplified}
+Jimmy~T.H. Smith, Andrew Warrington, and Scott~W. Linderman.
+\newblock Simplified state space layers for sequence modeling.
+\newblock In {\em International Conference on Learning Representations (ICLR)},
+  2023.
+
+\bibitem{orvieto2023resurrecting}
+Antonio Orvieto, Samuel~L. Smith, Albert Gu, Ankit Gupta, Ashok Cutkosky, and
+  Christopher De~Sa.
+\newblock Resurrecting recurrent neural networks for long sequences.
+\newblock In {\em Proceedings of the 40th International Conference on Machine
+  Learning (ICML)}, volume 202, pages 26670--26698. PMLR, 2023.
+
+\bibitem{gu2023mamba}
+Albert Gu and Tri Dao.
+\newblock Mamba: Linear-time sequence modeling with selective state spaces.
+\newblock {\em arXiv preprint arXiv:2312.00752}, 2023.
+
+\bibitem{dao2024transformers}
+Tri Dao and Albert Gu.
+\newblock Transformers are {SSM}s: Generalized models and efficient algorithms
+  through structured state space duality.
+\newblock In {\em Proceedings of the 41st International Conference on Machine
+  Learning (ICML)}, volume 235, pages 9809--9832. PMLR, 2024.
+
+\bibitem{dong2021attention}
+Yihe Dong, Jean-Baptiste Cordonnier, and Andreas Loukas.
+\newblock Attention is not all you need: Pure attention loses rank doubly
+  exponentially with depth.
+\newblock In {\em Proceedings of the 38th International Conference on Machine
+  Learning (ICML)}, volume 139, pages 2793--2803. PMLR, 2021.
+
+\bibitem{arjovsky2016unitary}
+Martin Arjovsky, Amar Shah, and Yoshua Bengio.
+\newblock Unitary evolution recurrent neural networks.
+\newblock In {\em Proceedings of the 33rd International Conference on Machine
+  Learning (ICML)}, volume~48, pages 1120--1128. PMLR, 2016.
+
+\bibitem{helfrich2018orthogonal}
+Kyle Helfrich, Devon Willmott, and Qiang Ye.
+\newblock Orthogonal recurrent neural networks with scaled {C}ayley transform.
+\newblock In {\em Proceedings of the 35th International Conference on Machine
+  Learning (ICML)}, volume~80, pages 1969--1978. PMLR, 2018.
+
+\bibitem{lezcanocasado2019cheap}
+Mario Lezcano-Casado and David Mart{\'i}nez-Rubio.
+\newblock Cheap orthogonal constraints in neural networks: A simple
+  parametrization of the orthogonal and unitary group.
+\newblock In {\em Proceedings of the 36th International Conference on Machine
+  Learning (ICML)}, volume~97, pages 3794--3803. PMLR, 2019.
+
+\bibitem{greydanus2019hamiltonian}
+Samuel Greydanus, Misko Dzamba, and Jason Yosinski.
+\newblock Hamiltonian neural networks.
+\newblock In {\em Advances in Neural Information Processing Systems (NeurIPS)},
+  volume~32, pages 15379--15389, 2019.
+
+\bibitem{chen2020symplectic}
+Zhengdao Chen, Jianyu Zhang, Martin Arjovsky, and L{\'e}on Bottou.
+\newblock Symplectic recurrent neural networks.
+\newblock In {\em International Conference on Learning Representations (ICLR)},
+  2020.
+
+\bibitem{rusch2024oscillatory}
+T.~Konstantin Rusch and Daniela Rus.
+\newblock Oscillatory state-space models.
+\newblock In {\em Proceedings of the 41st International Conference on Machine
+  Learning (ICML)}, volume 235, pages 42751--42776. PMLR, 2024.
+
+\bibitem{roy2007effective}
+Olivier Roy and Martin Vetterli.
+\newblock The effective rank: A measure of effective dimensionality.
+\newblock In {\em 15th European Signal Processing Conference (EUSIPCO)}, pages
+  606--610. IEEE, 2007.
+
+\bibitem{garrido2023rankme}
+Quentin Garrido, Randall Balestriero, Laurent Najman, and Yann LeCun.
+\newblock {RankMe}: Assessing the downstream performance of pretrained
+  self-supervised representations by their rank.
+\newblock In {\em Proceedings of the 40th International Conference on Machine
+  Learning (ICML)}, volume 202, pages 10929--10974. PMLR, 2023.
+
+\bibitem{jing2022understanding}
+Li~Jing, Pascal Vincent, Yann LeCun, and Yuandong Tian.
+\newblock Understanding dimensional collapse in contrastive self-supervised
+  learning.
+\newblock In {\em International Conference on Learning Representations (ICLR)},
+  2022.
+
+\bibitem{vanderschaft2014porthamiltonian}
+Arjan van~der Schaft and Dimitri Jeltsema.
+\newblock Port-{H}amiltonian systems theory: An introductory overview.
+\newblock {\em Foundations and Trends in Systems and Control}, 1(2-3):173--378,
+  2014.
+
+\bibitem{massaroli2020dissecting}
+Stefano Massaroli, Michael Poli, Jinkyoo Park, Atsushi Yamashita, and Hajime
+  Asama.
+\newblock Dissecting complementary and port-{H}amiltonian neural networks.
+\newblock In {\em Proceedings of the 21st IFAC World Congress}, pages
+  1098--1103, 2020.
+\newblock arXiv:1911.08272.
+
+\bibitem{desai2021porthamiltonian}
+Saurabh Desai, Marios Mattheakis, Hjorleifur Eyjolfsdottir, Frank Protopapas,
+  and Stephen~J. Roberts.
+\newblock Port-{H}amiltonian neural networks for learning explicit
+  time-dependent dynamical systems.
+\newblock {\em Physical Review E}, 104(3):034312, 2021.
+
+\bibitem{cherifi2022discrete}
+Karim Cherifi, Hans Zwart, and Arjan van~der Schaft.
+\newblock Discrete-time port-{H}amiltonian systems and their neural network
+  representations.
+\newblock {\em IEEE Control Systems Letters}, 6:3158--3163, 2022.
+
+\bibitem{toledo2020observer}
+Jes{\'u}s Toledo, Yongxin Wu, H{\'e}ctor Ram{\'\i}rez, and Yann Le~Gorrec.
+\newblock Observer-based boundary control of distributed port-{H}amiltonian
+  systems.
+\newblock {\em Automatica}, 117:108990, 2020.
+
+\bibitem{toledo2024structure}
+Jes{\'u}s-Pablo Toledo-Zucco, Denis Matignon, and Charles Poussot-Vassal.
+\newblock Structure-preserving discretization and model order reduction of
+  boundary-controlled 1{D} port-{H}amiltonian systems.
+\newblock {\em Systems \& Control Letters}, 186:105763, 2024.
+
+\bibitem{ruth1983canonical}
+Ronald~D. Ruth.
+\newblock A canonical integration technique.
+\newblock {\em IEEE Transactions on Nuclear Science}, NS-30(4):2669--2671,
+  1983.
+
+\bibitem{forest1990fourth}
+Etienne Forest and Ronald~D. Ruth.
+\newblock Fourth-order symplectic integration.
+\newblock {\em Physica D: Nonlinear Phenomena}, 43(1):105--117, 1990.
+
+\bibitem{strang1968construction}
+Gilbert Strang.
+\newblock On the construction and comparison of difference schemes.
+\newblock {\em SIAM Journal on Numerical Analysis}, 5(3):506--517, 1968.
+
+\bibitem{yoshida1990construction}
+Haruo Yoshida.
+\newblock Construction of higher order symplectic integrators.
+\newblock {\em Physics Letters A}, 150(5-7):262--268, 1990.
+
+\bibitem{gomez2017reversible}
+Aidan~N. Gomez, Mengye Ren, Raquel Urtasun, and Roger~B. Grosse.
+\newblock The reversible residual network: Backpropagation without storing
+  activations.
+\newblock In {\em Advances in Neural Information Processing Systems (NeurIPS)},
+  volume~30, pages 2214--2224, 2017.
+
+\bibitem{lezcanocasado2019trivializations}
+Mario Lezcano-Casado.
+\newblock Trivializations for gradient-based optimization on manifolds.
+\newblock In {\em Advances in Neural Information Processing Systems (NeurIPS)},
+  volume~32, pages 9154--9164, 2019.
+
+\bibitem{hurwitz1898composition}
+Adolf Hurwitz.
+\newblock {\"U}ber die composition der quadratischen formen von beliebig vielen
+  variabeln.
+\newblock {\em Nachrichten von der Gesellschaft der Wissenschaften zu
+  G{\"o}ttingen, Mathematisch-Physikalische Klasse}, pages 309--316, 1898.
+
+\end{thebibliography}
